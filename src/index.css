@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-slate-100 dark:bg-slate-950 transition-colors duration-300;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #1e293b;
+    overflow-x: hidden;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-glass;
+  }
+
+  .glass-dark {
+    @apply bg-dark-900/70 dark:bg-slate-950/70 backdrop-blur-md border border-white/10;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 
+           bg-primary-600 text-white font-semibold rounded-2xl
+           shadow-lg shadow-primary-600/25
+           hover:bg-primary-500 hover:shadow-xl hover:shadow-primary-600/30 
+           hover:-translate-y-0.5
+           active:scale-[0.98]
+           transition-all duration-300 ease-out
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3
+           bg-white dark:bg-slate-800 text-primary-700 dark:text-primary-400 font-semibold rounded-2xl
+           border-2 border-primary-200 dark:border-primary-800/50
+           hover:bg-primary-50 dark:hover:bg-slate-700 hover:border-primary-300 dark:hover:border-primary-700
+           hover:-translate-y-0.5
+           active:scale-[0.98]
+           transition-all duration-300 ease-out;
+  }
+
+  .btn-accent {
+    @apply inline-flex items-center justify-center px-6 py-3
+           bg-accent-500 text-white font-semibold rounded-2xl
+           shadow-lg shadow-accent-500/25
+           hover:bg-accent-400 hover:shadow-xl
+           hover:-translate-y-0.5
+           active:scale-[0.98]
+           transition-all duration-300 ease-out;
+  }
+
+  .card {
+    @apply bg-white dark:bg-slate-800 rounded-2xl shadow-card dark:shadow-none dark:border dark:border-slate-700
+           hover:shadow-card-hover dark:hover:border-slate-600
+           transition-all duration-300 ease-out
+           overflow-hidden;
+  }
+
+  .card-interactive {
+    @apply card cursor-pointer hover:-translate-y-1;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 bg-white dark:bg-slate-800 border-2 border-dark-200 dark:border-slate-700 rounded-xl
+           text-dark-800 dark:text-slate-100 placeholder:text-dark-400 dark:placeholder:text-slate-500
+           focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10
+           transition-all duration-200;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 
+           bg-white dark:bg-slate-800 border-2 border-dark-200 dark:border-slate-700 rounded-full
+           text-sm font-medium text-dark-600 dark:text-slate-300
+           cursor-pointer select-none
+           hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700
+           dark:hover:border-slate-600 dark:hover:bg-slate-700 dark:hover:text-slate-100
+           transition-all duration-200;
+  }
+
+  .chip-active {
+    @apply border-primary-500 dark:border-primary-500 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 shadow-sm;
+  }
+
+  .section-title {
+    @apply text-2xl font-bold text-dark-900 dark:text-slate-100;
+  }
+
+  .section-subtitle {
+    @apply text-dark-500 dark:text-slate-400 font-normal mt-1;
+  }
+
+  .page-container {
+    @apply min-h-screen w-full max-w-7xl mx-auto relative bg-transparent dark:bg-slate-900 transition-colors duration-300;
+  }
+
+  .page-bg-landscape {
+    background-image: url('/images/gialai_hero_landscape.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+
+  /* Dark mode maps */
+  .dark .leaflet-layer,
+  .dark .leaflet-control-zoom-in,
+  .dark .leaflet-control-zoom-out,
+  .dark .leaflet-control-attribution {
+    filter: invert(1) hue-rotate(180deg) brightness(95%) contrast(90%);
+  }
+
+  /* Skeleton loading */
+  .skeleton {
+    @apply bg-dark-200 dark:bg-slate-700 rounded-lg animate-pulse;
+  }
+
+  /* Thematic Patterns */
+  .bg-brocade {
+    background-image: url('/images/brocade-pattern.svg');
+    background-repeat: repeat;
+  }
+  .bg-mountain {
+    background-image: url('/images/mountain-bg.svg');
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+  }
+
+  /* Chat bubbles */
+  .chat-bubble-user {
+    @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white rounded-[24px] rounded-br-[8px] px-5 py-3.5 
+           max-w-[85%] ml-auto shadow-md shadow-primary-600/20 border border-primary-400/50;
+  }
+
+  .chat-bubble-ai {
+    @apply bg-white/90 dark:bg-slate-800/90 backdrop-blur-md text-dark-800 dark:text-slate-100 rounded-[24px] rounded-bl-[8px] px-5 py-3.5 
+           max-w-[85%] mr-auto shadow-sm dark:shadow-none border border-white/50 dark:border-slate-700/50;
+  }
+
+  /* Chat Markdown styling */
+  .markdown-prose {
+    @apply text-sm leading-relaxed;
+  }
+  .markdown-prose p {
+    margin-bottom: 0.5rem;
+  }
+  .markdown-prose p:last-child {
+    margin-bottom: 0;
+  }
+  .markdown-prose ul {
+    list-style-type: disc;
+    margin-left: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .markdown-prose ol {
+    list-style-type: decimal;
+    margin-left: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .markdown-prose li {
+    margin-bottom: 0.25rem;
+  }
+  .markdown-prose strong {
+    font-weight: 700;
+    color: inherit;
+  }
+  .markdown-prose h3, .markdown-prose h4 {
+    font-weight: 700;
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+  .markdown-prose a {
+    @apply text-primary-600 underline underline-offset-2;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-accent-500;
+  }
+
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+  .delay-600 { animation-delay: 600ms; }
+  .delay-700 { animation-delay: 700ms; }
+  .delay-800 { animation-delay: 800ms; }
+}

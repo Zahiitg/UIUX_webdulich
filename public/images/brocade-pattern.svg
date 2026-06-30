@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60">
+  <rect width="60" height="60" fill="transparent"/>
+  <!-- Diamond pattern -->
+  <path d="M30 0 L60 30 L30 60 L0 30 Z" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.3"/>
+  <path d="M30 10 L50 30 L30 50 L10 30 Z" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.3"/>
+  <!-- Inner shapes -->
+  <polygon points="30,20 40,30 30,40 20,30" fill="#f59e0b" fill-opacity="0.2"/>
+  <!-- Corner triangles -->
+  <polygon points="0,0 15,0 0,15" fill="#166534" fill-opacity="0.2"/>
+  <polygon points="60,0 45,0 60,15" fill="#166534" fill-opacity="0.2"/>
+  <polygon points="0,60 15,60 0,45" fill="#166534" fill-opacity="0.2"/>
+  <polygon points="60,60 45,60 60,45" fill="#166534" fill-opacity="0.2"/>
+</svg>
