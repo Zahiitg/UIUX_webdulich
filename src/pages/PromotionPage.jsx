@@ -256,7 +256,7 @@ function DealCard({ deal, index }) {
 
         {/* CTA Button */}
         <button
-          onClick={() => navigate('/survey')}
+          onClick={() => navigate(`/tour-detail/${deal.id <= 5 ? deal.id : 1}?promoPrice=${deal.price}`)}
           className="w-full py-3.5 rounded-2xl font-bold text-white bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 hover:from-amber-600 hover:via-orange-600 hover:to-red-600 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base"
         >
           🔥 Đặt ngay

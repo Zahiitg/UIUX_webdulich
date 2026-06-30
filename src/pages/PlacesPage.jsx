@@ -1,12 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import toursData, { CATEGORY_CONFIG } from '../data/toursData';
-import useTravelStore from '../store/useTravelStore';
-import TourCard from '../components/TourCard';
-import { TourSkeleton } from '../components/SkeletonLoading';
-import TourCompareModal from '../components/TourCompareModal';
-
-// Category config with icons and gradient colors are imported from toursData.js
+import placesData, { preferenceOptions } from '../data/placesData';
+import PlaceCard from '../components/PlaceCard';
+import { PlaceSkeleton } from '../components/SkeletonLoading';
 
 const SORT_OPTIONS = [
   { key: 'rating', label: 'Đánh giá cao nhất', icon: '⭐' },
@@ -14,46 +10,35 @@ const SORT_OPTIONS = [
   { key: 'popular', label: 'Phổ biến nhất', icon: '🔥' },
 ];
 
-const DURATION_OPTIONS = [
-  { key: 'all', label: 'Mọi thời gian', icon: '⏳' },
-  { key: '1', label: 'Trong ngày', icon: '☀️' },
-  { key: '2', label: '2 Ngày 1 Đêm', icon: '🏕️' },
-  { key: '3+', label: 'Từ 3 Ngày trở lên', icon: '🎒' },
-];
-
 const PRICE_OPTIONS = [
   { key: 'all', label: 'Mọi mức giá', icon: '💵' },
-  { key: 'low', label: 'Dưới 1 triệu', icon: '🔖' },
-  { key: 'mid', label: '1 - 2 triệu', icon: '💳' },
-  { key: 'high', label: 'Trên 2 triệu', icon: '💎' },
+  { key: 'free', label: 'Miễn phí', icon: '✨' },
+  { key: 'paid', label: 'Có phí', icon: '💳' },
 ];
 
-export default function ToursPage() {
+export default function PlacesPage() {
   const [activeCategory, setActiveCategory] = useState('Tất cả');
   const [activeSort, setActiveSort] = useState('rating');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
-  const [showDurationDropdown, setShowDurationDropdown] = useState(false);
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
-  const [activeDuration, setActiveDuration] = useState('all');
   const [activePriceRange, setActivePriceRange] = useState('all');
   const [isLoading, setIsLoading] = useState(false);
-  const [showCompareModal, setShowCompareModal] = useState(false);
   
-  const compareList = useTravelStore((state) => state.compareList);
-
   // Extract unique categories from data
   const categories = useMemo(() => {
     const cats = new Set();
-    toursData.forEach((p) => p.category.forEach((c) => cats.add(c)));
+    placesData.forEach((p) => p.category?.forEach((c) => cats.add(c)));
     return ['Tất cả', ...Array.from(cats)];
   }, []);
 
-  // Filter categories to only the ones in our config (matching required list)
-  const filterCategories = useMemo(() => {
-    return Object.keys(CATEGORY_CONFIG).filter(
-      (cat) => cat === 'Tất cả' || categories.includes(cat)
-    );
-  }, [categories]);
+  // Map category to icon from preferenceOptions
+  const getCategoryConfig = (catName) => {
+    if (catName === 'Tất cả') return { icon: '📍', color: 'from-primary-500 to-primary-700' };
+    const match = preferenceOptions.find(p => p.label === catName);
+    if (match) return { icon: match.icon, color: match.color };
+    // fallback
+    return { icon: '✨', color: 'from-accent-400 to-accent-600' };
+  };
 
   // Simulate loading when filters change
   useEffect(() => {
@@ -62,29 +47,21 @@ export default function ToursPage() {
       setIsLoading(false);
     }, 400); // 400ms loading effect
     return () => clearTimeout(timer);
-  }, [activeCategory, activeSort, activeDuration, activePriceRange]);
+  }, [activeCategory, activeSort, activePriceRange]);
 
   // Filtered & sorted places
   const filteredPlaces = useMemo(() => {
-    let result = [...toursData];
+    let result = [...placesData];
 
     // Filter by category
     if (activeCategory !== 'Tất cả') {
-      result = result.filter((p) => p.category.includes(activeCategory));
-    }
-    
-    // Filter by duration
-    if (activeDuration !== 'all') {
-      if (activeDuration === '1') result = result.filter(p => p.durationValue === 1);
-      if (activeDuration === '2') result = result.filter(p => p.durationValue === 2);
-      if (activeDuration === '3+') result = result.filter(p => p.durationValue >= 3);
+      result = result.filter((p) => p.category?.includes(activeCategory));
     }
     
     // Filter by price
     if (activePriceRange !== 'all') {
-      if (activePriceRange === 'low') result = result.filter(p => p.price < 1000000);
-      if (activePriceRange === 'mid') result = result.filter(p => p.price >= 1000000 && p.price <= 2000000);
-      if (activePriceRange === 'high') result = result.filter(p => p.price > 2000000);
+      if (activePriceRange === 'free') result = result.filter(p => p.price === 0);
+      if (activePriceRange === 'paid') result = result.filter(p => p.price > 0);
     }
 
     // Sort
@@ -103,16 +80,15 @@ export default function ToursPage() {
     }
 
     return result;
-  }, [activeCategory, activeSort, activeDuration, activePriceRange]);
+  }, [activeCategory, activeSort, activePriceRange]);
 
   // Stats
-  const totalPlaces = toursData.length;
+  const totalPlaces = placesData.length;
   const avgRating = (
-    toursData.reduce((sum, p) => sum + p.rating, 0) / totalPlaces
+    placesData.reduce((sum, p) => sum + p.rating, 0) / totalPlaces
   ).toFixed(1);
 
   const activeSortLabel = SORT_OPTIONS.find((s) => s.key === activeSort)?.label;
-  const activeDurationLabel = DURATION_OPTIONS.find((s) => s.key === activeDuration)?.label;
   const activePriceLabel = PRICE_OPTIONS.find((s) => s.key === activePriceRange)?.label;
 
   return (
@@ -131,25 +107,23 @@ export default function ToursPage() {
         {/* Decorative blobs */}
         <div className="absolute top-10 left-10 w-72 h-72 bg-accent-400/20 rounded-full blur-3xl animate-pulse-soft" />
         <div className="absolute bottom-0 right-10 w-96 h-96 bg-primary-400/15 rounded-full blur-3xl animate-pulse-soft" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-accent-500/10 rounded-full blur-3xl" />
-
+        
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
           <div className="text-center animate-fade-in-up">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-sm font-medium mb-6">
               <span className="w-2 h-2 rounded-full bg-accent-400 animate-pulse-soft" />
-              Khám phá {totalPlaces}+ điểm đến hấp dẫn
+              Khám phá {totalPlaces}+ điểm đến tuyệt đẹp
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-4 tracking-tight">
-              Khám Phá{' '}
+              Tọa độ{' '}
               <span className="bg-gradient-to-r from-accent-300 to-accent-500 bg-clip-text text-transparent">
                 Gia Lai
               </span>
             </h1>
             <p className="text-lg sm:text-xl text-white/75 max-w-2xl mx-auto leading-relaxed mb-8">
-              Vùng đất bazan đỏ với những thác nước hùng vĩ, đồi chè bạt ngàn,
-              văn hóa cồng chiêng Tây Nguyên và ẩm thực phố núi đặc sắc.
+              Từ những danh thắng thiên nhiên hùng vĩ đến các quán cà phê ngắm hoàng hôn cực chill. Tìm ngay điểm đến tiếp theo của bạn!
             </p>
 
             {/* Scroll hint */}
@@ -190,8 +164,8 @@ export default function ToursPage() {
             },
             {
               value: '100%',
-              label: 'Miễn phí tư vấn AI',
-              icon: '🤖',
+              label: 'Thông tin chi tiết',
+              icon: '📚',
               color: 'from-purple-500 to-pink-500',
             },
           ].map((stat, i) => (
@@ -218,20 +192,20 @@ export default function ToursPage() {
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             {/* Category filters */}
             <div className="flex gap-2 overflow-x-auto pb-1 flex-1 w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-              {filterCategories.map((cat) => {
+              {categories.map((cat) => {
                 const isActive = activeCategory === cat;
-                const config = CATEGORY_CONFIG[cat];
+                const config = getCategoryConfig(cat);
                 return (
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
                     className={`flex-shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
                       isActive
-                        ? `bg-gradient-to-r ${config?.gradient || 'from-primary-500 to-primary-700'} text-white shadow-lg shadow-primary-500/25 scale-105`
+                        ? `bg-gradient-to-r ${config.color} text-white shadow-lg shadow-primary-500/25 scale-105`
                         : 'bg-white dark:bg-slate-800 text-dark-600 dark:text-slate-300 border border-dark-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-600 hover:text-primary-700 dark:hover:text-primary-400'
                     }`}
                   >
-                    <span className="text-base">{config?.icon || '📍'}</span>
+                    <span className="text-base">{config.icon}</span>
                     {cat}
                   </button>
                 );
@@ -241,43 +215,13 @@ export default function ToursPage() {
             {/* Divider line for larger screens */}
             <div className="hidden lg:block w-px h-8 bg-dark-200 dark:bg-slate-700"></div>
             
-            {/* Advanced Filters (Duration, Price, Sort) */}
+            {/* Advanced Filters (Price, Sort) */}
             <div className="flex flex-wrap items-center gap-2 lg:flex-shrink-0">
-              {/* Duration Dropdown */}
-              <div className="relative flex-shrink-0">
-                <button
-                  onMouseDown={() => { setShowDurationDropdown(!showDurationDropdown); setShowPriceDropdown(false); setShowSortDropdown(false); }}
-                  onBlur={() => setTimeout(() => setShowDurationDropdown(false), 150)}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-dark-200 dark:border-slate-700 text-sm font-medium text-dark-700 dark:text-slate-300 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-200"
-                >
-                  <span className="text-base hidden sm:inline">{DURATION_OPTIONS.find(o => o.key === activeDuration)?.icon}</span>
-                  {activeDurationLabel}
-                  <svg className={`w-4 h-4 text-dark-400 transition-transform duration-200 ${showDurationDropdown ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                {showDurationDropdown && (
-                  <div className="absolute left-0 lg:right-0 lg:left-auto top-full mt-2 w-56 rounded-xl glass shadow-float border border-white/20 dark:border-slate-700 py-1 animate-fade-in-down z-50">
-                    {DURATION_OPTIONS.map((opt) => (
-                      <button
-                        key={opt.key}
-                        onMouseDown={() => { setActiveDuration(opt.key); setShowDurationDropdown(false); }}
-                        className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors duration-150 ${
-                          activeDuration === opt.key ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 font-semibold' : 'text-dark-600 dark:text-slate-300 hover:bg-dark-50 dark:hover:bg-slate-800'
-                        }`}
-                      >
-                        <span className="text-base">{opt.icon}</span> {opt.label}
-                        {activeDuration === opt.key && <svg className="w-4 h-4 ml-auto text-primary-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
+              
               {/* Price Dropdown */}
               <div className="relative flex-shrink-0">
                 <button
-                  onMouseDown={() => { setShowPriceDropdown(!showPriceDropdown); setShowDurationDropdown(false); setShowSortDropdown(false); }}
+                  onMouseDown={() => { setShowPriceDropdown(!showPriceDropdown); setShowSortDropdown(false); }}
                   onBlur={() => setTimeout(() => setShowPriceDropdown(false), 150)}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-dark-200 dark:border-slate-700 text-sm font-medium text-dark-700 dark:text-slate-300 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-200"
                 >
@@ -308,7 +252,7 @@ export default function ToursPage() {
               {/* Sort dropdown */}
               <div className="relative flex-shrink-0">
                 <button
-                  onMouseDown={() => { setShowSortDropdown(!showSortDropdown); setShowDurationDropdown(false); setShowPriceDropdown(false); }}
+                  onMouseDown={() => { setShowSortDropdown(!showSortDropdown); setShowPriceDropdown(false); }}
                   onBlur={() => setTimeout(() => setShowSortDropdown(false), 150)}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-dark-200 dark:border-slate-700 text-sm font-medium text-dark-700 dark:text-slate-300 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-200"
                 >
@@ -359,7 +303,7 @@ export default function ToursPage() {
               <>
                 kết quả cho{' '}
                 <span className="font-semibold text-primary-600 dark:text-primary-400">
-                  {CATEGORY_CONFIG[activeCategory]?.icon} {activeCategory}
+                  {getCategoryConfig(activeCategory).icon} {activeCategory}
                 </span>
               </>
             )}
@@ -373,13 +317,13 @@ export default function ToursPage() {
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <TourSkeleton key={`skeleton-${i}`} />
+              <PlaceSkeleton key={`skeleton-${i}`} />
             ))}
           </div>
         ) : filteredPlaces.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {filteredPlaces.map((place, index) => (
-              <TourCard key={place.id} place={place} index={index} />
+              <PlaceCard key={place.id} place={place} index={index} />
             ))}
           </div>
         ) : (
@@ -396,7 +340,6 @@ export default function ToursPage() {
             <button
               onClick={() => {
                 setActiveCategory('Tất cả');
-                setActiveDuration('all');
                 setActivePriceRange('all');
               }}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-bold transition-colors shadow-lg shadow-primary-500/30"
@@ -406,59 +349,7 @@ export default function ToursPage() {
           </div>
         )}
       </section>
-
-      {/* ============ BOTTOM CTA ============ */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div className="relative rounded-3xl overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary-700 via-primary-600 to-accent-600" />
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djJoLTR2LTJoNHptMC0zMHYyaC00VjRoNHptMCAxMHYyaC00di0yaDR6bTAgMTB2MmgtNHYtMmg0em0tMjAgMjB2MmgtNHYtMmg0em0wLTMwdjJoLTRWNGg0em0wIDEwdjJoLTR2LTJoNHptMCAxMHYyaC00di0yaDR6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-50" />
-          <div className="relative px-6 sm:px-12 py-10 sm:py-14 text-center">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">
-              Cần tư vấn lịch trình? 🌟
-            </h2>
-            <p className="text-white/80 max-w-xl mx-auto mb-6 text-sm sm:text-base">
-              AI Travel Assistant sẽ giúp bạn lên kế hoạch hoàn hảo cho chuyến đi Gia Lai,
-              phù hợp với sở thích và ngân sách của bạn.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link
-                to="/chatbot"
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-white text-primary-700 font-bold shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300"
-              >
-                <span className="text-lg">🤖</span>
-                Chat với AI
-              </Link>
-              <Link
-                to="/survey"
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-white/15 backdrop-blur-md border border-white/30 text-white font-semibold hover:bg-white/25 hover:-translate-y-0.5 transition-all duration-300"
-              >
-                <span className="text-lg">📝</span>
-                Tạo lịch trình
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
       </div>
-
-      {/* Floating Compare Button */}
-      {compareList.length > 0 && (
-        <div className="fixed bottom-6 right-6 z-40 animate-fade-in-up">
-          <button 
-            onClick={() => setShowCompareModal(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-full shadow-2xl font-bold transition-all"
-          >
-            <span>📊</span>
-            So sánh ({compareList.length})
-          </button>
-        </div>
-      )}
-
-      {/* Compare Modal */}
-      {showCompareModal && (
-        <TourCompareModal onClose={() => setShowCompareModal(false)} />
-      )}
     </div>
   );
 }
-

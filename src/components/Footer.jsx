@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Globe, Camera, MessageCircle, MapPin, Mail, Phone } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Footer() {
   const location = useLocation();
+  const { t } = useTranslation();
   
   // Các trang không muốn hiển thị footer
   const hiddenRoutes = ['/itinerary', '/chatbot', '/onboarding'];
@@ -32,7 +34,7 @@ export default function Footer() {
               </div>
             </Link>
             <p className="text-dark-500 dark:text-slate-400 text-sm leading-relaxed">
-              Khám phá vẻ đẹp hoang sơ, hùng vĩ và đậm đà bản sắc văn hóa của Gia Lai với hệ thống gợi ý lịch trình AI thông minh.
+              {t('footer.desc')}
             </p>
             <div className="flex items-center gap-4">
               <a href="#" className="w-10 h-10 rounded-full bg-dark-50 dark:bg-slate-800 flex items-center justify-center text-dark-600 dark:text-slate-400 hover:bg-primary-500 hover:text-white transition-colors">
@@ -49,26 +51,31 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-bold text-dark-900 dark:text-white mb-6">Khám Phá</h3>
+            <h3 className="text-lg font-bold text-dark-900 dark:text-white mb-6">{t('footer.quickLinks')}</h3>
             <ul className="space-y-4">
               <li>
+                <Link to="/places" className="text-dark-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  {t('nav.places')}
+                </Link>
+              </li>
+              <li>
                 <Link to="/tours" className="text-dark-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                  Danh sách Tour
+                  {t('nav.tours')}
                 </Link>
               </li>
               <li>
                 <Link to="/promotions" className="text-dark-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                  Khuyến mãi HOT
+                  {t('nav.promotions')}
                 </Link>
               </li>
               <li>
                 <Link to="/search" className="text-dark-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                  Tìm kiếm địa điểm
+                  {t('common.search')}
                 </Link>
               </li>
               <li>
                 <Link to="/about" className="text-dark-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                  Về chúng tôi
+                  {t('nav.about')}
                 </Link>
               </li>
             </ul>
@@ -76,7 +83,7 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-bold text-dark-900 dark:text-white mb-6">Liên Hệ</h3>
+            <h3 className="text-lg font-bold text-dark-900 dark:text-white mb-6">{t('footer.contact')}</h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-dark-500 dark:text-slate-400">
                 <MapPin className="w-5 h-5 flex-shrink-0 text-primary-500 mt-0.5" />

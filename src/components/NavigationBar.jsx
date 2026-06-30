@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { User } from 'lucide-react';
+import { User, Globe } from 'lucide-react';
 import useTravelStore from '../store/useTravelStore';
+import { useTranslation } from 'react-i18next';
 
 const navLinks = [
   { to: '/onboarding', label: 'Home' },
@@ -19,6 +20,12 @@ export default function NavigationBar() {
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t, i18n } = useTranslation();
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language?.startsWith('en') ? 'vi' : 'en';
+    i18n.changeLanguage(newLang);
+  };
 
   const handleSearch = () => {
     const q = searchQuery.trim();
@@ -36,7 +43,7 @@ export default function NavigationBar() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-800 transition-colors duration-300">
+    <nav className="fixed top-0 left-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-800 transition-colors duration-300 print:hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           
@@ -64,21 +71,28 @@ export default function NavigationBar() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Tìm kiếm địa điểm..." 
+                placeholder={t('common.search') + "..."} 
                 className="w-full bg-transparent px-3 py-2 text-sm text-dark-900 dark:text-white focus:outline-none placeholder-gray-400 dark:placeholder-slate-500"
               />
               <button 
                 onClick={handleSearch}
                 className="px-5 py-2 bg-primary-500 text-white text-sm font-medium hover:bg-primary-600 transition-colors"
               >
-                Search
+                {t('common.search')}
               </button>
             </div>
           </div>
 
           {/* Navigation Links Section - Desktop */}
           <div className="hidden lg:flex items-center space-x-6">
-            {navLinks.map((link) => (
+            {[
+              { to: '/onboarding', label: t('nav.home') },
+              { to: '/about', label: t('nav.about') },
+              { to: '/places', label: t('nav.places') },
+              { to: '/tours', label: t('nav.tours') },
+              { to: '/promotions', label: t('nav.promotions') },
+              { to: '/contact', label: t('nav.contact') },
+            ].map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
@@ -97,6 +111,15 @@ export default function NavigationBar() {
           </div>
           
           <div className="flex items-center gap-2 ml-6 lg:ml-8">
+            {/* Language Switcher */}
+            <button
+              onClick={toggleLanguage}
+              className="w-10 h-10 rounded-full bg-gray-100 dark:bg-slate-800 flex flex-shrink-0 items-center justify-center hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors border border-transparent dark:border-slate-700 text-sm font-bold text-primary-600 dark:text-primary-400"
+              title="Change Language"
+            >
+              {i18n.language?.startsWith('en') ? 'VI' : 'EN'}
+            </button>
+
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
@@ -150,7 +173,7 @@ export default function NavigationBar() {
                 onClick={() => navigate('/auth')}
                 className="hidden md:flex items-center justify-center h-10 px-4 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-full transition-colors whitespace-nowrap"
               >
-                Đăng nhập
+                {t('nav.login')}
               </button>
             )}
 
@@ -179,7 +202,7 @@ export default function NavigationBar() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Tìm kiếm địa điểm..." 
+                placeholder={t('common.search') + "..."} 
                 className="w-full bg-transparent px-3 py-2.5 text-sm text-dark-900 dark:text-white focus:outline-none placeholder-gray-400 dark:placeholder-slate-500"
               />
               <button 
@@ -191,7 +214,14 @@ export default function NavigationBar() {
             </div>
 
             {/* Mobile Nav Links */}
-            {navLinks.map((link) => (
+            {[
+              { to: '/onboarding', label: t('nav.home') },
+              { to: '/about', label: t('nav.about') },
+              { to: '/places', label: t('nav.places') },
+              { to: '/tours', label: t('nav.tours') },
+              { to: '/promotions', label: t('nav.promotions') },
+              { to: '/contact', label: t('nav.contact') },
+            ].map((link) => (
               <Link
                 key={link.to}
                 to={link.to}

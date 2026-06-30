@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import useTravelStore from '../store/useTravelStore';
 import { CATEGORY_CONFIG } from '../data/toursData';
 
@@ -31,13 +32,32 @@ function StarRating({ rating }) {
 
 export default function TourCard({ place, index }) {
   const [imgError, setImgError] = useState(false);
+  
   const wishlist = useTravelStore((state) => state.wishlist);
   const toggleWishlist = useTravelStore((state) => state.toggleWishlist);
   const isWishlisted = wishlist.includes(place.id);
 
+  const compareList = useTravelStore((state) => state.compareList);
+  const toggleCompare = useTravelStore((state) => state.toggleCompare);
+  const isCompared = compareList.includes(place.id);
+
   const handleWishlist = (e) => {
     e.preventDefault();
     toggleWishlist(place.id);
+  };
+
+  const handleCompare = (e) => {
+    e.preventDefault();
+    if (!isCompared && compareList.length >= 3) {
+      toast.error('Chỉ được so sánh tối đa 3 tour!');
+      return;
+    }
+    toggleCompare(place.id);
+    if (!isCompared) {
+      toast.success('Đã thêm vào danh sách so sánh');
+    } else {
+      toast.success('Đã xóa khỏi danh sách so sánh', { icon: '🗑️' });
+    }
   };
 
   return (
@@ -69,14 +89,24 @@ export default function TourCard({ place, index }) {
           {/* Price badge */}
           <div className="absolute top-3 right-3 flex items-center gap-2">
             <button
+              onClick={handleCompare}
+              title="So sánh"
+              className="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-800/90 flex items-center justify-center backdrop-blur-md shadow-lg hover:scale-110 transition-transform"
+            >
+              <svg className={`w-4 h-4 ${isCompared ? 'text-blue-500' : 'text-dark-500 dark:text-slate-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </button>
+            <button
               onClick={handleWishlist}
+              title="Yêu thích"
               className="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-800/90 flex items-center justify-center backdrop-blur-md shadow-lg hover:scale-110 transition-transform"
             >
               <svg className={`w-4 h-4 ${isWishlisted ? 'text-red-500 fill-red-500' : 'text-dark-500 dark:text-slate-400'}`} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={isWishlisted ? 0 : 2} fill={isWishlisted ? "currentColor" : "none"}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
             </button>
-            <span className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold backdrop-blur-md shadow-lg ${
+            <span className={`hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold backdrop-blur-md shadow-lg ${
               place.price === 0
                 ? 'bg-primary-500/90 text-white'
                 : 'bg-white/90 dark:bg-slate-800/90 text-primary-600 dark:text-primary-400'
@@ -136,13 +166,15 @@ export default function TourCard({ place, index }) {
           </div>
 
           {/* Address */}
-          <div className="flex items-center gap-1.5 text-xs text-dark-400 dark:text-slate-500">
-            <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <span className="truncate">{place.address}</span>
-          </div>
+          {place.address && (
+            <div className="flex items-center gap-1.5 text-xs text-dark-400 dark:text-slate-500">
+              <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span className="truncate">{place.address}</span>
+            </div>
+          )}
 
           {/* View detail CTA */}
           <div className="pt-1">

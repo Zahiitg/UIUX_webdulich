@@ -36,6 +36,38 @@ const useTravelStore = create((set, get) => ({
     return { wishlist: newWishlist };
   }),
 
+  // ===== Compare (So sánh Tours) =====
+  compareList: JSON.parse(localStorage.getItem('travel_compare')) || [],
+  isCompareModalOpen: false,
+  setCompareModalOpen: (isOpen) => set({ isCompareModalOpen: isOpen }),
+  toggleCompare: (tourId) => set((state) => {
+    const exists = state.compareList.includes(tourId);
+    let newCompareList = [];
+    let isMaxedOut = false;
+
+    if (exists) {
+      newCompareList = state.compareList.filter(id => id !== tourId);
+    } else {
+      if (state.compareList.length < 3) {
+        newCompareList = [...state.compareList, tourId];
+      } else {
+        newCompareList = state.compareList; // Tối đa 3
+        isMaxedOut = true;
+      }
+    }
+    
+    // We do not handle Toast here because Zustand is for state. 
+    // We handle it in the Component. But we can return a flag if needed.
+    // Actually, we don't need a flag, we just check length before calling toggleCompare in Component.
+    
+    localStorage.setItem('travel_compare', JSON.stringify(newCompareList));
+    return { compareList: newCompareList };
+  }),
+  clearCompare: () => set(() => {
+    localStorage.setItem('travel_compare', JSON.stringify([]));
+    return { compareList: [], isCompareModalOpen: false };
+  }),
+
   // ===== Bookings (Lịch sử đặt tour) =====
   bookings: JSON.parse(localStorage.getItem('travel_bookings')) || [],
   addBooking: (booking) => set((state) => {

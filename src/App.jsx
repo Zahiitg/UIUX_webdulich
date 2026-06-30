@@ -1,10 +1,14 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { lazy, Suspense, useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
+import { HelmetProvider } from 'react-helmet-async';
 import useTravelStore from './store/useTravelStore';
 import NavigationBar from './components/NavigationBar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTopButton from './components/ScrollToTopButton';
+import CompareFloatingBar from './components/CompareFloatingBar';
+import CompareModal from './components/CompareModal';
 import { auth } from './config/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 
@@ -16,6 +20,7 @@ const ItineraryPage = lazy(() => import('./pages/ItineraryPage'));
 const ChatbotPage = lazy(() => import('./pages/ChatbotPage'));
 const PlaceDetailPage = lazy(() => import('./pages/PlaceDetailPage'));
 const TourDetailPage = lazy(() => import('./pages/TourDetailPage'));
+const PlacesPage = lazy(() => import('./pages/PlacesPage'));
 const ToursPage = lazy(() => import('./pages/ToursPage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const SearchPage = lazy(() => import('./pages/SearchPage'));
@@ -65,8 +70,18 @@ function App() {
 
   return (
     <Router>
+      <HelmetProvider>
+      <Toaster 
+        position="bottom-center"
+        toastOptions={{
+          className: 'dark:bg-slate-800 dark:text-white',
+          duration: 3000,
+        }}
+      />
       <NavigationBar />
       <ScrollToTopButton />
+      <CompareFloatingBar />
+      <CompareModal />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Navigate to="/onboarding" replace />} />
@@ -80,6 +95,7 @@ function App() {
           <Route path="/chatbot" element={<ChatbotPage />} />
           <Route path="/place-detail/:id" element={<PlaceDetailPage />} />
           <Route path="/tour-detail/:id" element={<TourDetailPage />} />
+          <Route path="/places" element={<PlacesPage />} />
           <Route path="/tours" element={<ToursPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/search" element={<SearchPage />} />
@@ -104,6 +120,7 @@ function App() {
         </Routes>
       </Suspense>
       <Footer />
+      </HelmetProvider>
     </Router>
   );
 }

@@ -1,5 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import placesData from '../data/placesData';
+import Breadcrumb from '../components/Breadcrumb';
+import ShareMenu from '../components/ShareMenu';
 
 const FALLBACK_IMAGES = [
   "/images/lang_stor_bahnar_1782505259629.png", // Lake
@@ -106,13 +108,9 @@ export default function PlaceDetailPage() {
         </button>
 
         {/* Share button */}
-        <button
-          className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/30 backdrop-blur-md flex items-center justify-center hover:bg-black/50 transition-colors"
-        >
-          <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-          </svg>
-        </button>
+        <div className="absolute top-4 right-4 z-20">
+          <ShareMenu title={`Khám phá: ${place.name}`} />
+        </div>
 
         {/* Hero text */}
         <div className="absolute bottom-0 inset-x-0 p-5 z-10">
@@ -138,6 +136,13 @@ export default function PlaceDetailPage() {
 
       {/* ──── Content ──── */}
       <div className="px-4 -mt-4 relative z-10">
+        <div className="pt-8 pb-4">
+          <Breadcrumb items={[
+            { label: 'Tìm kiếm', path: '/search' },
+            { label: place.name }
+          ]} />
+        </div>
+
         {/* Rating card */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card p-4 mb-4 animate-fade-in-up delay-100 border border-transparent dark:border-slate-700">
           <div className="flex items-center justify-between">

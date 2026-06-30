@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import toursData from '../data/toursData';
 import useTravelStore from '../store/useTravelStore';
+import Breadcrumb from '../components/Breadcrumb';
+import ShareMenu from '../components/ShareMenu';
 
 const FALLBACK_IMAGES = [
   "/images/lang_stor_bahnar_1782505259629.png",
@@ -30,7 +32,11 @@ function StarRating({ rating, size = 'md' }) {
 export default function TourDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const tour = toursData.find((t) => t.id === Number(id));
+  const [searchParams] = useSearchParams();
+  const promoPriceParam = searchParams.get('promoPrice');
+
+  const baseTour = toursData.find((t) => t.id === Number(id));
+  const tour = baseTour ? { ...baseTour, price: promoPriceParam ? parseInt(promoPriceParam) : baseTour.price } : null;
 
   const wishlist = useTravelStore((state) => state.wishlist);
   const toggleWishlist = useTravelStore((state) => state.toggleWishlist);
@@ -129,14 +135,18 @@ export default function TourDetailPage() {
           <span className="text-white">←</span>
         </button>
 
-        <button 
-          onClick={() => toggleWishlist(tour.id)} 
-          className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center hover:bg-black/60 transition-colors"
-        >
-          <svg className={`w-5 h-5 ${isWishlisted ? 'text-red-500 fill-red-500' : 'text-white'}`} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={isWishlisted ? 0 : 2} fill={isWishlisted ? "currentColor" : "none"}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-          </svg>
-        </button>
+        <div className="absolute top-4 right-4 z-20 flex items-center gap-3">
+          <ShareMenu title={`Khám phá tour: ${tour.name}`} />
+          <button 
+            onClick={() => toggleWishlist(tour.id)} 
+            className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center hover:bg-black/60 transition-colors"
+            title="Yêu thích"
+          >
+            <svg className={`w-5 h-5 ${isWishlisted ? 'text-red-500 fill-red-500' : 'text-white'}`} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={isWishlisted ? 0 : 2} fill={isWishlisted ? "currentColor" : "none"}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+          </button>
+        </div>
 
         <div className="absolute bottom-0 inset-x-0 p-5 z-10">
           <div className="flex gap-2 mb-3">
@@ -154,6 +164,12 @@ export default function TourDetailPage() {
       </div>
 
       <div className="px-4 sm:px-6 -mt-4 relative z-10 max-w-4xl mx-auto">
+        <div className="pt-8 pb-4">
+          <Breadcrumb items={[
+            { label: 'Tours', path: '/tours' },
+            { label: tour.name }
+          ]} />
+        </div>
         
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card p-5 mb-6 border border-dark-100 dark:border-slate-700">
           <p className="text-dark-600 dark:text-slate-300 text-sm leading-relaxed">{tour.description}</p>

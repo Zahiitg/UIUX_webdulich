@@ -6,6 +6,8 @@ import L from 'leaflet';
 import useTravelStore from '../store/useTravelStore';
 import placesData from '../data/placesData';
 import { generateItinerary } from '../services/aiService';
+import ShareMenu from '../components/ShareMenu';
+import { Printer } from 'lucide-react';
 
 // Fix default Leaflet marker icon issue in React
 delete L.Icon.Default.prototype._getIconUrl;
@@ -89,7 +91,7 @@ function CircularProgress({ percentage, size = 56, stroke = 5 }) {
 // ─── Shimmer Skeleton ─────────────────────────────────────
 function SkeletonLoader() {
   return (
-    <div className="page-container bg-dark-50 dark:bg-slate-900 flex flex-col relative overflow-hidden">
+    <div className="page-container pt-16 bg-dark-50 dark:bg-slate-900 flex flex-col relative overflow-hidden">
       {/* ── Background Watermark ── */}
       <div className="absolute inset-0 bg-brocade opacity-[0.02] dark:opacity-[0.05] pointer-events-none" />
 
@@ -181,38 +183,38 @@ function ActivityCard({ activity, isLast, index }) {
   const accent = accentColors[index % accentColors.length];
 
   return (
-    <div className="relative pl-8">
+    <div className="relative pl-8 print:pl-6 print:break-inside-avoid">
       {/* Timeline line */}
       {!isLast && (
-        <div className="absolute left-[11px] top-10 bottom-0 w-[2px] bg-gradient-to-b from-primary-300 to-primary-100" />
+        <div className="absolute left-[11px] top-10 bottom-0 w-[2px] bg-gradient-to-b from-primary-300 to-primary-100 print:bg-gray-300 print:left-[9px]" />
       )}
 
       {/* Timeline dot */}
-      <div className="absolute left-0 top-3 w-6 h-6 rounded-full bg-white border-[3px] border-primary-500 shadow-md z-10 flex items-center justify-center">
-        <div className="w-2 h-2 rounded-full bg-primary-500" />
+      <div className="absolute left-0 top-3 w-6 h-6 rounded-full bg-white border-[3px] border-primary-500 shadow-md z-10 flex items-center justify-center print:border-gray-400 print:shadow-none print:left-[-2px]">
+        <div className="w-2 h-2 rounded-full bg-primary-500 print:bg-gray-500" />
       </div>
 
       {/* Card */}
       <button
         onClick={() => navigate(`/place-detail/${activity.placeId}`)}
-        className="w-full text-left card-interactive mb-4 group overflow-hidden"
+        className="w-full text-left card-interactive mb-4 group overflow-hidden print:shadow-none print:border print:border-gray-300 print:bg-white print:transform-none"
       >
         {/* Accent stripe */}
-        <div className={`h-1 bg-gradient-to-r ${accent}`} />
+        <div className={`h-1 bg-gradient-to-r ${accent} print:hidden`} />
 
-        <div className="p-4">
+        <div className="p-4 print:p-3">
           <div className="flex gap-3">
             {/* Thumbnail */}
             {place && (
-              <div className="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden shadow-sm relative bg-dark-100 dark:bg-slate-800 flex items-center justify-center">
+              <div className="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden shadow-sm relative bg-dark-100 dark:bg-slate-800 flex items-center justify-center print:shadow-none print:border print:border-gray-200">
                 {/* Fallback Icon */}
-                <div className="absolute inset-0 flex items-center justify-center text-2xl z-0">
+                <div className="absolute inset-0 flex items-center justify-center text-2xl z-0 print:text-gray-400">
                   {place.category[0] === 'Ẩm thực' ? '🍜' : place.category[0] === 'Cà phê' ? '☕' : '🏞️'}
                 </div>
                 <img
                   src={place.image}
                   alt={place.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 relative z-10"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 relative z-10 print:transform-none"
                   onError={(e) => {
                     e.target.onerror = null; // prevent infinite loop
                     e.target.src = FALLBACK_IMAGES[place.id % FALLBACK_IMAGES.length];
@@ -224,14 +226,14 @@ function ActivityCard({ activity, isLast, index }) {
             <div className="flex-1 min-w-0">
               {/* Time badge */}
               <div className="flex items-center gap-2 mb-1.5">
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-[11px] font-semibold rounded-full">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-[11px] font-semibold rounded-full print:bg-gray-100 print:text-gray-800 print:border print:border-gray-200">
                   🕐 {activity.timeSlot}
                 </span>
-                <span className="text-[11px] text-dark-400 dark:text-slate-400 font-medium">{activity.duration}</span>
+                <span className="text-[11px] text-dark-400 dark:text-slate-400 font-medium print:text-gray-600">{activity.duration}</span>
               </div>
 
               {/* Place name */}
-              <h4 className="font-bold text-dark-900 dark:text-slate-100 group-hover:text-primary-700 dark:group-hover:text-primary-400 transition-colors text-[15px] leading-snug mb-0.5 truncate">
+              <h4 className="font-bold text-dark-900 dark:text-slate-100 group-hover:text-primary-700 dark:group-hover:text-primary-400 transition-colors text-[15px] leading-snug mb-0.5 truncate print:text-black print:whitespace-normal print:line-clamp-2">
                 {activity.name}
               </h4>
 
@@ -239,9 +241,9 @@ function ActivityCard({ activity, isLast, index }) {
               {place && (
                 <div className="flex items-center gap-1">
                   <span className="text-amber-400 text-xs">★</span>
-                  <span className="text-xs font-medium text-dark-500 dark:text-slate-400">{place.rating}</span>
-                  <span className="text-xs text-dark-300 dark:text-slate-600">·</span>
-                  <span className="text-xs text-dark-400 dark:text-slate-400">{place.reviewCount} đánh giá</span>
+                  <span className="text-xs font-medium text-dark-500 dark:text-slate-400 print:text-gray-600">{place.rating}</span>
+                  <span className="text-xs text-dark-300 dark:text-slate-600 print:text-gray-400">·</span>
+                  <span className="text-xs text-dark-400 dark:text-slate-400 print:text-gray-600">{place.reviewCount} đánh giá</span>
                 </div>
               )}
             </div>
@@ -249,18 +251,18 @@ function ActivityCard({ activity, isLast, index }) {
 
           {/* Note */}
           {activity.note && (
-            <p className="text-xs text-dark-400 dark:text-slate-400 leading-relaxed mt-2 line-clamp-2">
+            <p className="text-xs text-dark-400 dark:text-slate-400 leading-relaxed mt-2 line-clamp-2 print:text-gray-700 print:line-clamp-none">
               {activity.note}
             </p>
           )}
 
           {/* Footer: cost + travel time */}
-          <div className="flex items-center justify-between pt-2 mt-2 border-t border-dark-100 dark:border-slate-700">
-            <span className="text-xs font-semibold text-accent-600 dark:text-accent-400">
+          <div className="flex items-center justify-between pt-2 mt-2 border-t border-dark-100 dark:border-slate-700 print:border-gray-200">
+            <span className="text-xs font-semibold text-accent-600 dark:text-accent-400 print:text-gray-800">
               {activity.estimatedCost > 0 ? formatVND(activity.estimatedCost) : 'Miễn phí'}
             </span>
             {!isLast && activity.travelTimeToNext && (
-              <span className="inline-flex items-center gap-1 text-xs text-dark-400 dark:text-slate-400">
+              <span className="inline-flex items-center gap-1 text-xs text-dark-400 dark:text-slate-400 print:text-gray-600">
                 🚗 {activity.travelTimeToNext}
               </span>
             )}
@@ -282,21 +284,21 @@ function DaySection({ day, dayIndex }) {
 
   return (
     <div
-      className="mb-6 opacity-0 animate-fade-in-up"
+      className="mb-6 opacity-0 animate-fade-in-up print:opacity-100 print:animate-none"
       style={{ animationDelay: `${dayIndex * 200}ms`, animationFillMode: 'forwards' }}
     >
       {/* Day header */}
-      <div className={`bg-gradient-to-r ${bg} rounded-2xl px-5 py-4 mb-5 shadow-lg relative overflow-hidden`}>
+      <div className={`bg-gradient-to-r ${bg} rounded-2xl px-5 py-4 mb-5 shadow-lg relative overflow-hidden print:shadow-none print:border print:border-gray-300 print:bg-none print:text-black`}>
         {/* Decorative circles */}
-        <div className="absolute -right-4 -top-4 w-20 h-20 bg-white/10 rounded-full" />
-        <div className="absolute -right-2 bottom-0 w-12 h-12 bg-white/5 rounded-full" />
+        <div className="absolute -right-4 -top-4 w-20 h-20 bg-white/10 rounded-full print:hidden" />
+        <div className="absolute -right-2 bottom-0 w-12 h-12 bg-white/5 rounded-full print:hidden" />
 
         <div className="relative z-10">
-          <span className="inline-block px-2 py-0.5 bg-white/20 text-white/90 rounded-md text-[10px] font-bold uppercase tracking-wider mb-1">
+          <span className="inline-block px-2 py-0.5 bg-white/20 text-white/90 rounded-md text-[10px] font-bold uppercase tracking-wider mb-1 print:bg-gray-200 print:text-gray-800">
             Ngày {day.dayNumber}
           </span>
-          <h3 className="text-white font-bold text-lg leading-tight">{day.title}</h3>
-          <p className="text-white/70 text-xs mt-1">
+          <h3 className="text-white font-bold text-lg leading-tight print:text-black">{day.title}</h3>
+          <p className="text-white/70 text-xs mt-1 print:text-gray-600">
             {day.activities.length} hoạt động
           </p>
         </div>
@@ -525,12 +527,12 @@ export default function ItineraryPage() {
 
   // ── Rendered ──
   return (
-    <div className="w-full pb-28 bg-dark-50 dark:bg-slate-900 min-h-screen flex flex-col relative">
+    <div className="w-full pt-16 pb-28 bg-dark-50 dark:bg-slate-900 min-h-screen flex flex-col relative print:bg-white print:pt-0">
       {/* ── Background Watermark ── */}
-      <div className="absolute inset-0 bg-brocade opacity-[0.02] dark:opacity-[0.05] pointer-events-none" />
+      <div className="absolute inset-0 bg-brocade opacity-[0.02] dark:opacity-[0.05] pointer-events-none print:hidden" />
 
       {/* ── Top Cover Image ── */}
-      <div className="relative h-56 w-full flex-shrink-0 z-0">
+      <div className="relative h-56 w-full flex-shrink-0 z-0 print:hidden">
         <img 
           src="/images/chu_dang_ya_volcano_1782505165301.png" 
           alt="Gia Lai" 
@@ -541,19 +543,31 @@ export default function ItineraryPage() {
         {/* Back Button */}
         <button
             onClick={() => navigate(-1)}
-            className="absolute top-4 left-4 w-10 h-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/40 z-20"
+            className="absolute top-4 left-4 w-10 h-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/40 z-20 print:hidden"
           >
             <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
         </button>
+
+        {/* Share Button */}
+        <div className="absolute top-4 right-4 z-20 flex gap-2 print:hidden">
+          <button
+            onClick={() => window.print()}
+            className="w-10 h-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/40 text-white"
+            title="In lịch trình"
+          >
+            <Printer className="w-5 h-5" />
+          </button>
+          <ShareMenu title="Lịch trình của tôi - Gia Lai Travel Guide" text="Xem chi tiết lịch trình du lịch cá nhân hóa này!" />
+        </div>
       </div>
 
       {/* ──── Summary Cards ──── */}
-      <div className="px-4 pt-5 pb-2 relative z-10 -mt-16">
+      <div className="px-4 pt-5 pb-2 relative z-10 -mt-16 print:mt-4">
         <div className="grid grid-cols-3 gap-3">
           {/* Total cost */}
-          <div className="card p-3.5 border border-dark-50 dark:border-slate-700 animate-fade-in-up">
+          <div className="card p-3.5 border border-dark-50 dark:border-slate-700 animate-fade-in-up print:border-gray-300 print:shadow-none">
             <p className="text-[10px] uppercase tracking-wider text-dark-400 dark:text-slate-400 font-bold mb-1">
               Tổng chi phí
             </p>
@@ -563,7 +577,7 @@ export default function ItineraryPage() {
           </div>
 
           {/* Match percentage */}
-          <div className="card p-3.5 border border-dark-50 dark:border-slate-700 flex flex-col items-center justify-center animate-fade-in-up delay-100">
+          <div className="card p-3.5 border border-dark-50 dark:border-slate-700 flex flex-col items-center justify-center animate-fade-in-up delay-100 print:border-gray-300 print:shadow-none">
             <p className="text-[10px] uppercase tracking-wider text-dark-400 dark:text-slate-400 font-bold mb-1.5">
               Phù hợp
             </p>
@@ -576,7 +590,7 @@ export default function ItineraryPage() {
           </div>
 
           {/* Number of days */}
-          <div className="card p-3.5 border border-dark-50 dark:border-slate-700 animate-fade-in-up delay-200">
+          <div className="card p-3.5 border border-dark-50 dark:border-slate-700 animate-fade-in-up delay-200 print:border-gray-300 print:shadow-none">
             <p className="text-[10px] uppercase tracking-wider text-dark-400 dark:text-slate-400 font-bold mb-1">
               Số ngày
             </p>
@@ -590,10 +604,10 @@ export default function ItineraryPage() {
 
       {/* ──── Tips banner ──── */}
       {itinerary.tips && itinerary.tips.length > 0 && (
-        <div className="px-4 mt-3 animate-fade-in delay-300 relative z-10">
-          <div className="bg-accent-50 dark:bg-accent-900/30 border border-accent-200 dark:border-accent-800/50 rounded-2xl px-4 py-3 flex items-start gap-2.5">
+        <div className="px-4 mt-3 animate-fade-in delay-300 relative z-10 print:mt-6">
+          <div className="bg-accent-50 dark:bg-accent-900/30 border border-accent-200 dark:border-accent-800/50 rounded-2xl px-4 py-3 flex items-start gap-2.5 print:border-gray-300 print:bg-white">
             <span className="text-lg flex-shrink-0 mt-0.5">💡</span>
-            <p className="text-xs text-accent-800 dark:text-accent-200 leading-relaxed font-medium">
+            <p className="text-xs text-accent-800 dark:text-accent-200 leading-relaxed font-medium print:text-gray-800">
               {itinerary.tips[0]}
             </p>
           </div>
@@ -601,7 +615,7 @@ export default function ItineraryPage() {
       )}
 
       {/* ──── Mobile Tab Toggle ──── */}
-      <div className="px-4 mt-5 mb-4 lg:hidden relative z-10">
+      <div className="px-4 mt-5 mb-4 lg:hidden relative z-10 print:hidden">
         <div className="inline-flex bg-dark-100 dark:bg-slate-800 rounded-full p-1 w-full">
           <button
             onClick={() => setActiveTab('timeline')}
@@ -627,9 +641,9 @@ export default function ItineraryPage() {
       </div>
 
       {/* ──── Content (Mobile & Desktop) ──── */}
-      <div className="px-4 lg:px-8 lg:mt-8 relative z-10">
+      <div className="px-4 lg:px-8 lg:mt-8 relative z-10 print:mt-8">
         {/* Mobile View: Tabs */}
-        <div className="lg:hidden">
+        <div className="lg:hidden print:hidden">
           {activeTab === 'timeline' ? (
             <div className="pb-8">
               {itinerary.days.map((day, idx) => (
@@ -644,19 +658,19 @@ export default function ItineraryPage() {
         </div>
 
         {/* Desktop View: 2 Columns */}
-        <div className="hidden lg:grid lg:grid-cols-12 lg:gap-8 items-start pb-12">
+        <div className="hidden lg:grid lg:grid-cols-12 lg:gap-8 items-start pb-12 print:block">
           {/* Left Column: Timeline */}
-          <div className="col-span-5 xl:col-span-4 pr-2">
-            <h2 className="text-2xl font-bold text-dark-900 dark:text-white mb-6">
+          <div className="col-span-5 xl:col-span-4 pr-2 print:w-full">
+            <h2 className="text-2xl font-bold text-dark-900 dark:text-white mb-6 print:text-black print:text-center print:mb-8 print:text-3xl">
               Chi tiết lịch trình
             </h2>
-            <div className="space-y-8">
+            <div className="space-y-8 print:space-y-4">
               {itinerary.days.map((day, idx) => (
                 <DaySection key={day.dayNumber} day={day} dayIndex={idx} />
               ))}
             </div>
             {/* Desktop Action Button */}
-            <div className="mt-8 pt-6 border-t border-dark-100">
+            <div className="mt-8 pt-6 border-t border-dark-100 print:hidden">
               <button
                 onClick={() => navigate('/chatbot')}
                 className="w-full btn-primary py-4 rounded-2xl text-base shadow-float group relative overflow-hidden"
@@ -671,14 +685,14 @@ export default function ItineraryPage() {
           </div>
 
           {/* Right Column: Sticky Map */}
-          <div className="col-span-7 xl:col-span-8 sticky top-24 h-[75vh]">
+          <div className="col-span-7 xl:col-span-8 sticky top-24 h-[75vh] print:h-[500px] print:static print:mt-8 print:w-full">
             <ItineraryMap itinerary={itinerary} />
           </div>
         </div>
       </div>
 
       {/* ──── Fixed Bottom Action (Mobile Only) ──── */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white via-white to-transparent dark:from-slate-900 dark:via-slate-900 z-30 lg:hidden">
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white via-white to-transparent dark:from-slate-900 dark:via-slate-900 z-30 lg:hidden print:hidden">
         <div className="max-w-xl mx-auto">
           <button
             onClick={() => navigate('/chatbot')}
