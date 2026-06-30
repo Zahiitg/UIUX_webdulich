@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { User } from 'lucide-react';
 import useTravelStore from '../store/useTravelStore';
 
 const navLinks = [
@@ -13,6 +14,7 @@ const navLinks = [
 export default function NavigationBar() {
   const theme = useTravelStore((state) => state.theme);
   const toggleTheme = useTravelStore((state) => state.toggleTheme);
+  const user = useTravelStore((state) => state.user);
   const navigate = useNavigate();
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
@@ -103,6 +105,54 @@ export default function NavigationBar() {
             >
               {theme === 'dark' ? '☀️' : '🌙'}
             </button>
+
+            {/* Auth Button / Avatar Dropdown */}
+            {user ? (
+              <div className="relative group z-[60]">
+                <button onClick={() => navigate('/profile')} className="w-10 h-10 rounded-full bg-primary-100 dark:bg-slate-700 flex items-center justify-center text-primary-600 dark:text-primary-400 font-bold overflow-hidden border-2 border-transparent hover:border-primary-500 transition-all">
+                  {user.photoURL ? (
+                    <img src={user.photoURL} alt={user.displayName} className="w-full h-full object-cover" />
+                  ) : (
+                    user.displayName?.charAt(0)?.toUpperCase() || 'U'
+                  )}
+                </button>
+                {/* Dropdown Menu */}
+                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-dark-100 dark:border-slate-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right">
+                  <div className="p-2">
+                    <div className="px-3 py-2 text-sm text-dark-900 dark:text-white font-medium border-b border-dark-100 dark:border-slate-700 mb-2 truncate">
+                      {user.displayName || user.email}
+                    </div>
+                    <button onClick={() => navigate('/profile')} className="w-full text-left px-3 py-2 text-sm text-dark-700 dark:text-slate-300 hover:bg-dark-50 dark:hover:bg-slate-700 rounded-lg transition-colors">
+                      Hồ sơ của tôi
+                    </button>
+                    <button onClick={() => navigate('/my-bookings')} className="w-full text-left px-3 py-2 text-sm text-dark-700 dark:text-slate-300 hover:bg-dark-50 dark:hover:bg-slate-700 rounded-lg transition-colors mt-1">
+                      Lịch sử đặt Tour
+                    </button>
+                    <button onClick={() => navigate('/wishlist')} className="w-full text-left px-3 py-2 text-sm text-dark-700 dark:text-slate-300 hover:bg-dark-50 dark:hover:bg-slate-700 rounded-lg transition-colors mt-1">
+                      Danh sách yêu thích
+                    </button>
+                    <button onClick={() => {
+                      import('firebase/auth').then(({ signOut }) => {
+                        import('../config/firebase').then(m => {
+                          signOut(m.auth);
+                          useTravelStore.getState().logout();
+                          navigate('/onboarding');
+                        });
+                      });
+                    }} className="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors mt-1">
+                      Đăng xuất
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={() => navigate('/auth')}
+                className="hidden md:flex items-center justify-center h-10 px-4 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-full transition-colors whitespace-nowrap"
+              >
+                Đăng nhập
+              </button>
+            )}
 
             {/* Mobile Menu Button */}
             <button

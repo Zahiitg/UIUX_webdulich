@@ -2,6 +2,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { lazy, Suspense, useEffect } from 'react';
 import useTravelStore from './store/useTravelStore';
 import NavigationBar from './components/NavigationBar';
+import Footer from './components/Footer';
+import ProtectedRoute from './components/ProtectedRoute';
+import ScrollToTopButton from './components/ScrollToTopButton';
+import { auth } from './config/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 // Lazy load pages for performance
 const OnboardingPage = lazy(() => import('./pages/OnboardingPage'));
@@ -16,6 +21,12 @@ const AboutPage = lazy(() => import('./pages/AboutPage'));
 const SearchPage = lazy(() => import('./pages/SearchPage'));
 const PromotionPage = lazy(() => import('./pages/PromotionPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
+const AuthPage = lazy(() => import('./pages/AuthPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const WishlistPage = lazy(() => import('./pages/WishlistPage'));
+const BookingConfirmationPage = lazy(() => import('./pages/BookingConfirmationPage'));
+const MyBookingsPage = lazy(() => import('./pages/MyBookingsPage'));
 
 // Loading fallback
 function PageLoader() {
@@ -31,17 +42,39 @@ function PageLoader() {
   );
 }
 
-
-
 function App() {
+  const setUser = useTravelStore((state) => state.setUser);
+
+  // Restore user session on app load
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser({
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL
+        });
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [setUser]);
+
   return (
     <Router>
       <NavigationBar />
+      <ScrollToTopButton />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Navigate to="/onboarding" replace />} />
           <Route path="/onboarding" element={<OnboardingPage />} />
+          <Route path="/auth" element={<AuthPage />} />
           <Route path="/survey" element={<SurveyPage />} />
+          
+          {/* Main App Routes */}
           <Route path="/trip-info" element={<TripInfoPage />} />
           <Route path="/itinerary" element={<ItineraryPage />} />
           <Route path="/chatbot" element={<ChatbotPage />} />
@@ -52,9 +85,25 @@ function App() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/promotions" element={<PromotionPage />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="*" element={<Navigate to="/onboarding" replace />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
+          <Route path="/booking-confirmation/:code" element={<BookingConfirmationPage />} />
+          
+          {/* Protected Routes */}
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          } />
+          <Route path="/my-bookings" element={
+            <ProtectedRoute>
+              <MyBookingsPage />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
+      <Footer />
     </Router>
   );
 }

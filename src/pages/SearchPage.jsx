@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import placesData from '../data/placesData';
+import toursData from '../data/toursData';
+import TourCard from '../components/TourCard';
+import { PlaceSkeleton, TourSkeleton } from '../components/SkeletonLoading';
 
 // ─── Star Rating ─────────────────────────────────────────
 function StarRating({ rating }) {
@@ -125,7 +128,6 @@ function PlaceCard({ place, index }) {
 function EmptyState({ query }) {
   return (
     <div className="flex flex-col items-center justify-center py-20 animate-fade-in-up">
-      {/* Illustration */}
       <div className="relative mb-6">
         <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/40 dark:to-primary-800/30 flex items-center justify-center">
           <span className="text-5xl">🔍</span>
@@ -139,25 +141,9 @@ function EmptyState({ query }) {
         Không tìm thấy kết quả
       </h3>
       <p className="text-sm text-dark-500 dark:text-slate-400 text-center max-w-sm mb-2">
-        Không có địa điểm nào phù hợp với từ khóa{' '}
+        Không có mục nào phù hợp với từ khóa{' '}
         <span className="font-semibold text-primary-600 dark:text-primary-400">"{query}"</span>
       </p>
-      <p className="text-xs text-dark-400 dark:text-slate-500 text-center max-w-xs">
-        Hãy thử tìm kiếm với từ khóa khác, ví dụ: "thác nước", "văn hóa", hoặc "Pleiku"
-      </p>
-
-      {/* Suggestion chips */}
-      <div className="flex flex-wrap justify-center gap-2 mt-6">
-        {['Thiên nhiên', 'Văn hóa', 'Ẩm thực', 'Check-in'].map((suggestion) => (
-          <Link
-            key={suggestion}
-            to={`/search?q=${encodeURIComponent(suggestion)}`}
-            className="px-3.5 py-1.5 rounded-full text-xs font-medium bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-800/40 hover:bg-primary-100 dark:hover:bg-primary-900/50 transition-colors duration-200"
-          >
-            {suggestion}
-          </Link>
-        ))}
-      </div>
     </div>
   );
 }
@@ -168,30 +154,43 @@ export default function SearchPage() {
   const query = searchParams.get('q') || '';
   const normalizedQuery = query.toLowerCase().trim();
 
-  // Filter places by matching against multiple fields
+  const [activeTab, setActiveTab] = useState('places');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Filter logic
   const filteredPlaces = normalizedQuery
     ? placesData.filter((place) => {
         const searchIn = [
-          place.name,
-          place.shortDescription,
-          place.address,
-          ...(place.category || []),
-          ...(place.tags || []),
-        ]
-          .join(' ')
-          .toLowerCase();
-
+          place.name, place.shortDescription, place.address,
+          ...(place.category || []), ...(place.tags || [])
+        ].join(' ').toLowerCase();
         return searchIn.includes(normalizedQuery);
       })
     : [];
 
-  const resultCount = filteredPlaces.length;
+  const filteredTours = normalizedQuery
+    ? toursData.filter((tour) => {
+        const searchIn = [
+          tour.name, tour.shortDescription, tour.address, tour.duration,
+          ...(tour.category || []), ...(tour.highlights || [])
+        ].join(' ').toLowerCase();
+        return searchIn.includes(normalizedQuery);
+      })
+    : [];
+
+  // Debounce loading effect when query or tab changes
+  useEffect(() => {
+    if (query) {
+      setIsLoading(true);
+      const timer = setTimeout(() => setIsLoading(false), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [query, activeTab]);
 
   return (
     <div className="page-container pt-24 pb-16 px-4 sm:px-6 lg:px-8">
       {/* ──── Header ──── */}
-      <div className="mb-8 animate-fade-in">
-        {/* Breadcrumb */}
+      <div className="mb-6 animate-fade-in">
         <div className="flex items-center gap-2 text-xs text-dark-400 dark:text-slate-500 mb-4">
           <Link to="/" className="hover:text-primary-500 transition-colors duration-200">
             Trang chủ
@@ -200,57 +199,74 @@ export default function SearchPage() {
           <span className="text-dark-600 dark:text-slate-300">Tìm kiếm</span>
         </div>
 
-        {/* Title */}
-        <div className="flex flex-col sm:flex-row sm:items-end gap-2 sm:gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-dark-900 dark:text-slate-100 leading-tight">
-              {query ? (
-                <>
-                  Kết quả tìm kiếm cho:{' '}
-                  <span className="text-gradient">"{query}"</span>
-                </>
-              ) : (
-                'Tìm kiếm địa điểm'
-              )}
-            </h1>
-          </div>
-
-          {query && (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 whitespace-nowrap self-start sm:self-auto mb-1">
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
-              {resultCount} kết quả
-            </span>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-dark-900 dark:text-slate-100 leading-tight mb-6">
+          {query ? (
+            <>Kết quả tìm kiếm cho: <span className="text-gradient">"{query}"</span></>
+          ) : (
+            'Tìm kiếm'
           )}
-        </div>
+        </h1>
+
+        {query && (
+          <div className="flex gap-4 border-b border-dark-200 dark:border-slate-800">
+            <button
+              onClick={() => setActiveTab('places')}
+              className={`pb-3 text-sm font-semibold transition-colors duration-200 ${
+                activeTab === 'places'
+                  ? 'border-b-2 border-primary-500 text-primary-600 dark:text-primary-400'
+                  : 'text-dark-500 dark:text-slate-400 hover:text-dark-800 dark:hover:text-slate-200'
+              }`}
+            >
+              Địa điểm ({filteredPlaces.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('tours')}
+              className={`pb-3 text-sm font-semibold transition-colors duration-200 ${
+                activeTab === 'tours'
+                  ? 'border-b-2 border-primary-500 text-primary-600 dark:text-primary-400'
+                  : 'text-dark-500 dark:text-slate-400 hover:text-dark-800 dark:hover:text-slate-200'
+              }`}
+            >
+              Tour ({filteredTours.length})
+            </button>
+          </div>
+        )}
       </div>
 
       {/* ──── Results / Empty State ──── */}
-      {query && resultCount === 0 ? (
-        <EmptyState query={query} />
-      ) : query && resultCount > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-          {filteredPlaces.map((place, idx) => (
-            <PlaceCard key={place.id} place={place} index={idx} />
-          ))}
-        </div>
-      ) : (
-        /* No query provided */
+      {!query ? (
         <div className="flex flex-col items-center justify-center py-20 animate-fade-in-up">
           <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary-100 to-accent-100 dark:from-primary-900/40 dark:to-accent-900/30 flex items-center justify-center mb-5">
             <span className="text-4xl">🗺️</span>
           </div>
-          <h3 className="text-lg font-bold text-dark-800 dark:text-slate-200 mb-2">
-            Khám phá Gia Lai
-          </h3>
+          <h3 className="text-lg font-bold text-dark-800 dark:text-slate-200 mb-2">Khám phá Gia Lai</h3>
           <p className="text-sm text-dark-500 dark:text-slate-400 text-center max-w-sm">
-            Nhập từ khóa vào thanh tìm kiếm để khám phá các địa điểm du lịch tuyệt vời tại Gia Lai
+            Nhập từ khóa vào thanh tìm kiếm để khám phá các địa điểm và tour du lịch tuyệt vời tại Gia Lai
           </p>
         </div>
+      ) : isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 mt-6">
+          {[1, 2, 3, 4, 5, 6].map(i => (
+            activeTab === 'places' ? <PlaceSkeleton key={i} /> : <TourSkeleton key={i} />
+          ))}
+        </div>
+      ) : activeTab === 'places' && filteredPlaces.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 mt-6">
+          {filteredPlaces.map((place, idx) => (
+            <PlaceCard key={place.id} place={place} index={idx} />
+          ))}
+        </div>
+      ) : activeTab === 'tours' && filteredTours.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 mt-6">
+          {filteredTours.map((tour, idx) => (
+            <TourCard key={tour.id} place={tour} index={idx} />
+          ))}
+        </div>
+      ) : (
+        <EmptyState query={query} />
       )}
 
-      {/* ──── Decorative background elements ──── */}
+      {/* Decorative */}
       <div className="fixed top-32 -right-32 w-72 h-72 rounded-full bg-primary-400/5 dark:bg-primary-400/[0.03] blur-3xl pointer-events-none" />
       <div className="fixed bottom-20 -left-24 w-60 h-60 rounded-full bg-accent-400/5 dark:bg-accent-400/[0.03] blur-3xl pointer-events-none" />
     </div>

@@ -39,7 +39,7 @@ export default function TourDetailPage() {
   // Booking Modal State
   const [showBooking, setShowBooking] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const addBooking = useTravelStore(state => state.addBooking);
   
   const [bookingData, setBookingData] = useState({
     name: '',
@@ -76,8 +76,27 @@ export default function TourDetailPage() {
     // Giả lập thanh toán
     setTimeout(() => {
       setIsProcessing(false);
-      setBookingSuccess(true);
-    }, 2000);
+      
+      // Tạo mã booking ngẫu nhiên
+      const code = 'GL-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+      
+      // Lưu vào store
+      addBooking({
+        id: code,
+        tourId: tour.id,
+        tourName: tour.name,
+        image: tour.image,
+        ...bookingData,
+        totalPrice,
+        status: 'completed',
+        createdAt: new Date().toISOString()
+      });
+
+      setShowBooking(false);
+      
+      // Chuyển hướng
+      navigate(`/booking-confirmation/${code}`);
+    }, 1500);
   };
 
   const handleReviewSubmit = (e) => {
@@ -243,7 +262,6 @@ export default function TourDetailPage() {
               ✕
             </button>
             
-            {!bookingSuccess ? (
               <form onSubmit={handleBookingSubmit} className="p-6">
                 <h3 className="text-xl font-bold mb-6 dark:text-white">Thông tin Đặt Tour</h3>
                 
@@ -286,14 +304,6 @@ export default function TourDetailPage() {
                 </button>
                 <p className="text-center text-xs text-dark-400 mt-3">* Sau này sẽ tích hợp VNPay/MoMo tại đây</p>
               </form>
-            ) : (
-              <div className="p-8 text-center">
-                <div className="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl">✓</div>
-                <h3 className="text-2xl font-bold mb-2 dark:text-white">Đặt Tour Thành Công!</h3>
-                <p className="text-dark-500 dark:text-slate-400 mb-6 text-sm">Cảm ơn {bookingData.name}. Chúng tôi sẽ liên hệ lại qua SĐT {bookingData.phone} trong thời gian sớm nhất để xác nhận.</p>
-                <button onClick={() => { setShowBooking(false); setBookingSuccess(false); }} className="btn-primary w-full">Đóng</button>
-              </div>
-            )}
           </div>
         </div>
       )}

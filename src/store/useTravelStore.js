@@ -1,6 +1,11 @@
 import { create } from 'zustand';
 
 const useTravelStore = create((set, get) => ({
+  // ===== Authentication =====
+  user: null, // Sẽ lưu thông tin user từ Firebase (uid, email, displayName, photoURL)
+  setUser: (user) => set({ user }),
+  logout: () => set({ user: null }),
+
   // ===== Theme =====
   theme: localStorage.getItem('theme') || 'light',
   setTheme: (theme) => {
@@ -29,6 +34,14 @@ const useTravelStore = create((set, get) => ({
     localStorage.setItem('travel_wishlist', JSON.stringify(newWishlist));
     
     return { wishlist: newWishlist };
+  }),
+
+  // ===== Bookings (Lịch sử đặt tour) =====
+  bookings: JSON.parse(localStorage.getItem('travel_bookings')) || [],
+  addBooking: (booking) => set((state) => {
+    const newBookings = [booking, ...state.bookings];
+    localStorage.setItem('travel_bookings', JSON.stringify(newBookings));
+    return { bookings: newBookings };
   }),
 
   // ===== User Preferences (Màn 2) =====
