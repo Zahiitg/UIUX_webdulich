@@ -136,17 +136,30 @@ export default function AboutPage() {
               </h2>
             </div>
 
-            <p className="text-dark-600 dark:text-slate-300 leading-relaxed text-base md:text-lg">
-              GiaLai Guide ra đời với khát vọng đưa công nghệ AI tiên tiến vào
-              trải nghiệm du lịch, giúp du khách khám phá trọn vẹn vẻ đẹp hoang
-              sơ và văn hóa đặc sắc của vùng đất Gia Lai — Tây Nguyên. Chúng tôi
-              tin rằng mỗi chuyến đi đều xứng đáng được lên kế hoạch hoàn hảo,
-              từ lịch trình thông minh, gợi ý phù hợp sở thích, đến tối ưu chi
-              phí — tất cả chỉ trong vài bước đơn giản.
-            </p>
+            <div className="text-dark-600 dark:text-slate-300 leading-relaxed text-base md:text-lg space-y-4">
+              <p>
+                GiaLai Guide ra đời với khát vọng đưa công nghệ AI tiên tiến vào
+                trải nghiệm du lịch, giúp du khách khám phá trọn vẹn vẻ đẹp hoang
+                sơ từ đại ngàn Tây Nguyên hùng vĩ cho đến những bãi biển xanh trong 
+                vẫy gọi. Sự kết hợp độc đáo giữa văn hóa cồng chiêng huyền bí và nhịp 
+                sống biển khơi mang đến một hành trình trọn vẹn, đánh thức mọi giác quan.
+              </p>
+              <p>
+                Chúng tôi tin rằng mỗi chuyến đi không chỉ đơn thuần là việc di chuyển, mà là 
+                một hành trình "chữa lành" và kết nối sâu sắc với thiên nhiên. Bằng cách ứng 
+                dụng trí tuệ nhân tạo, GiaLai Guide tự động cá nhân hóa từng lịch trình: từ 
+                gợi ý điểm đến theo sở thích, lựa chọn ẩm thực địa phương đặc sắc, cho đến 
+                tối ưu hóa ngân sách.
+              </p>
+              <p>
+                Sứ mệnh của chúng tôi là biến mọi khâu chuẩn bị phức tạp trở nên cực kỳ 
+                đơn giản chỉ với vài bước chạm. Hãy để chúng tôi lo phần lên kế hoạch, 
+                việc của bạn là tận hưởng trọn vẹn những khoảnh khắc tuyệt vời nhất!
+              </p>
+            </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              {['Tây Nguyên', 'Trí tuệ nhân tạo (AI)', 'Du lịch thông minh', 'Văn hóa địa phương'].map(
+              {['Đại ngàn hùng vĩ', 'Biển xanh vẫy gọi', 'Trí tuệ nhân tạo (AI)', 'Du lịch thông minh'].map(
                 (tag) => (
                   <span
                     key={tag}

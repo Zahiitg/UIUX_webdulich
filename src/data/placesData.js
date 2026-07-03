@@ -1,256 +1,1215 @@
 const placesData = [
   {
     id: 1,
-    name: "Biển Hồ T'Nưng",
-    description: "Biển Hồ T'Nưng (hay còn gọi là Hồ T'Nưng) là hồ nước ngọt tự nhiên lớn nhất Tây Nguyên, nằm cách trung tâm thành phố Pleiku khoảng 7km về phía Bắc. Hồ được hình thành từ miệng núi lửa đã tắt hàng triệu năm, có diện tích mặt nước khoảng 230 ha. Quanh hồ là rừng thông xanh mướt, tạo nên khung cảnh thơ mộng và yên bình. Đây là biểu tượng du lịch của Gia Lai và là địa điểm check-in không thể bỏ qua.",
-    shortDescription: "Hồ nước ngọt tự nhiên lớn nhất Tây Nguyên, hình thành từ miệng núi lửa.",
-    category: ["Thiên nhiên", "Check-in"],
+    name: {
+      vi: "Biển Hồ T'Nưng",
+      en: "T'Nung Lake (Bien Ho)"
+    },
+    description: {
+      vi: "Biển Hồ T'Nưng (hay còn gọi là Hồ T'Nưng) là hồ nước ngọt tự nhiên lớn nhất Tây Nguyên, nằm cách trung tâm thành phố Pleiku khoảng 7km về phía Bắc. Hồ được hình thành từ miệng núi lửa đã tắt hàng triệu năm, có diện tích mặt nước khoảng 230 ha. Quanh hồ là rừng thông xanh mướt, tạo nên khung cảnh thơ mộng và yên bình. Đây là biểu tượng du lịch của Gia Lai và là địa điểm check-in không thể bỏ qua.",
+      en: "T'Nung Lake is the largest natural freshwater lake in the Central Highlands, located about 7km north of Pleiku city center. The lake was formed from an extinct volcanic crater millions of years ago, with a water surface area of about 230 hectares. Surrounding the lake is a lush green pine forest, creating a poetic and peaceful scenery. This is the tourism symbol of Gia Lai and a must-visit check-in spot."
+    },
+    shortDescription: {
+      vi: "Hồ nước ngọt tự nhiên lớn nhất Tây Nguyên, hình thành từ miệng núi lửa.",
+      en: "The largest natural freshwater lake in the Central Highlands, formed from a volcanic crater."
+    },
+    category: {
+      vi: ["Thiên nhiên", "Check-in"],
+      en: ["Nature", "Check-in"]
+    },
     rating: 4.7,
     reviewCount: 2340,
     price: 0,
-    priceNote: "Miễn phí",
+    priceNote: {
+      vi: "Miễn phí",
+      en: "Free"
+    },
     openTime: "06:00",
     closeTime: "18:00",
-    duration: "1-2 giờ",
-    address: "Xã Biển Hồ, TP. Pleiku, Gia Lai",
+    duration: {
+      vi: "1-2 giờ",
+      en: "1-2 hours"
+    },
+    address: {
+      vi: "Xã Biển Hồ, TP. Pleiku, Gia Lai",
+      en: "Bien Ho Commune, Pleiku City, Gia Lai"
+    },
     lat: 14.0167,
     lng: 108.0000,
     image: "/images/bien_ho_tnnung_1782505155088.png",
-    tags: ["Thiên nhiên", "Miễn phí", "Check-in"],
-    highlights: ["Cảnh hoàng hôn tuyệt đẹp", "Rừng thông quanh hồ", "Câu cá thư giãn"]
+    tags: {
+      vi: ["Thiên nhiên", "Miễn phí", "Check-in"],
+      en: ["Nature", "Free", "Check-in"]
+    },
+    highlights: {
+      vi: ["Cảnh hoàng hôn tuyệt đẹp", "Rừng thông quanh hồ", "Câu cá thư giãn"],
+      en: ["Beautiful sunset view", "Pine forest around the lake", "Relaxing fishing"]
+    }
   },
   {
     id: 2,
-    name: "Núi lửa Chư Đăng Ya",
-    description: "Núi lửa Chư Đăng Ya nằm ở xã Chư Đăng Ya, huyện Chư Păh, cách TP. Pleiku khoảng 30km. Đây là ngọn núi lửa đã tắt từ hàng triệu năm trước, với miệng núi lửa hình phễu đường kính khoảng 600m. Mùa hoa dã quỳ (tháng 11-12), toàn bộ sườn núi phủ một màu vàng rực rỡ, tạo nên cảnh quan đẹp mê hồn. Từ đỉnh núi có thể ngắm toàn cảnh thung lũng và những buôn làng Tây Nguyên.",
-    shortDescription: "Miệng núi lửa triệu năm với thảm hoa dã quỳ vàng rực.",
-    category: ["Thiên nhiên", "Trekking", "Check-in"],
+    name: {
+      vi: "Núi lửa Chư Đăng Ya",
+      en: "Chu Dang Ya Volcano"
+    },
+    description: {
+      vi: "Núi lửa Chư Đăng Ya nằm ở xã Chư Đăng Ya, huyện Chư Păh, cách TP. Pleiku khoảng 30km. Đây là ngọn núi lửa đã tắt từ hàng triệu năm trước, với miệng núi lửa hình phễu đường kính khoảng 600m. Mùa hoa dã quỳ (tháng 11-12), toàn bộ sườn núi phủ một màu vàng rực rỡ, tạo nên cảnh quan đẹp mê hồn. Từ đỉnh núi có thể ngắm toàn cảnh thung lũng và những buôn làng Tây Nguyên.",
+      en: "Chu Dang Ya Volcano is located in Chu Dang Ya commune, Chu Pah district, about 30km from Pleiku City. This is an extinct volcano from millions of years ago, with a funnel-shaped crater about 600m in diameter. During the wild sunflower season (November-December), the entire mountainside is covered in a brilliant yellow, creating a mesmerizing landscape. From the mountain peak, you can see the panoramic view of the valley and Central Highlands villages."
+    },
+    shortDescription: {
+      vi: "Miệng núi lửa triệu năm với thảm hoa dã quỳ vàng rực.",
+      en: "A million-year-old volcanic crater with a vibrant yellow wild sunflower carpet."
+    },
+    category: {
+      vi: ["Thiên nhiên", "Trekking", "Check-in"],
+      en: ["Nature", "Trekking", "Check-in"]
+    },
     rating: 4.8,
     reviewCount: 1890,
     price: 20000,
-    priceNote: "20.000đ/người",
+    priceNote: {
+      vi: "20.000đ/người",
+      en: "20,000 VND/person"
+    },
     openTime: "05:00",
     closeTime: "17:30",
-    duration: "2-3 giờ",
-    address: "Xã Chư Đăng Ya, H. Chư Păh, Gia Lai",
+    duration: {
+      vi: "2-3 giờ",
+      en: "2-3 hours"
+    },
+    address: {
+      vi: "Xã Chư Đăng Ya, H. Chư Păh, Gia Lai",
+      en: "Chu Dang Ya Commune, Chu Pah Dist, Gia Lai"
+    },
     lat: 14.1050,
     lng: 107.9230,
     image: "/images/chu_dang_ya_volcano_1782505165301.png",
-    tags: ["Thiên nhiên", "Trekking", "Hoa dã quỳ"],
-    highlights: ["Leo núi ngắm bình minh", "Hoa dã quỳ tháng 11", "Panorama Tây Nguyên"]
+    tags: {
+      vi: ["Thiên nhiên", "Trekking", "Hoa dã quỳ"],
+      en: ["Nature", "Trekking", "Wild sunflower"]
+    },
+    highlights: {
+      vi: ["Leo núi ngắm bình minh", "Hoa dã quỳ tháng 11", "Panorama Tây Nguyên"],
+      en: ["Mountain climbing for sunrise", "Wild sunflowers in November", "Central Highlands panorama"]
+    }
   },
   {
     id: 3,
-    name: "Thác Phú Cường",
-    description: "Thác Phú Cường nằm ở xã Dun, huyện Chư Sê, cách Pleiku khoảng 45km. Thác cao khoảng 45m, nước đổ xuống trắng xóa giữa rừng già nguyên sinh. Vào mùa mưa (tháng 6-10), dòng thác cuồn cuộn hùng vĩ, sương nước bay mịt mù. Khu vực xung quanh thác có nhiều tảng đá lớn, thích hợp cho việc ngồi nghỉ chân và ngắm cảnh. Đây được ví là 'Niagara thu nhỏ' của Tây Nguyên.",
-    shortDescription: "Thác nước hùng vĩ cao 45m giữa rừng nguyên sinh.",
-    category: ["Thiên nhiên", "Trekking"],
+    name: {
+      vi: "Thác Phú Cường",
+      en: "Phu Cuong Waterfall"
+    },
+    description: {
+      vi: "Thác Phú Cường nằm ở xã Dun, huyện Chư Sê, cách Pleiku khoảng 45km. Thác cao khoảng 45m, nước đổ xuống trắng xóa giữa rừng già nguyên sinh. Vào mùa mưa (tháng 6-10), dòng thác cuồn cuộn hùng vĩ, sương nước bay mịt mù. Khu vực xung quanh thác có nhiều tảng đá lớn, thích hợp cho việc ngồi nghỉ chân và ngắm cảnh. Đây được ví là 'Niagara thu nhỏ' của Tây Nguyên.",
+      en: "Phu Cuong Waterfall is located in Dun commune, Chu Se district, about 45km from Pleiku. The waterfall is about 45m high, with water cascading down in white foam amidst the primeval old forest. During the rainy season (June-October), the waterfall is majestic, with mist flying everywhere. The area around the waterfall has many large rocks, suitable for resting and sightseeing. This is considered the 'mini Niagara' of the Central Highlands."
+    },
+    shortDescription: {
+      vi: "Thác nước hùng vĩ cao 45m giữa rừng nguyên sinh.",
+      en: "Majestic 45m high waterfall amidst the primeval forest."
+    },
+    category: {
+      vi: ["Thiên nhiên", "Trekking"],
+      en: ["Nature", "Trekking"]
+    },
     rating: 4.5,
     reviewCount: 980,
     price: 15000,
-    priceNote: "15.000đ/người",
+    priceNote: {
+      vi: "15.000đ/người",
+      en: "15,000 VND/person"
+    },
     openTime: "07:00",
     closeTime: "17:00",
-    duration: "1-2 giờ",
-    address: "Xã Dun, H. Chư Sê, Gia Lai",
+    duration: {
+      vi: "1-2 giờ",
+      en: "1-2 hours"
+    },
+    address: {
+      vi: "Xã Dun, H. Chư Sê, Gia Lai",
+      en: "Dun Commune, Chu Se Dist, Gia Lai"
+    },
     lat: 13.7353,
     lng: 108.0575,
     image: "/images/thac_phu_cuong_1782505250630.png",
-    tags: ["Thiên nhiên", "Thác nước", "Trekking"],
-    highlights: ["Thác hùng vĩ mùa mưa", "Rừng nguyên sinh", "Tắm suối"]
+    tags: {
+      vi: ["Thiên nhiên", "Thác nước", "Trekking"],
+      en: ["Nature", "Waterfall", "Trekking"]
+    },
+    highlights: {
+      vi: ["Thác hùng vĩ mùa mưa", "Rừng nguyên sinh", "Tắm suối"],
+      en: ["Majestic waterfall in rainy season", "Primeval forest", "Stream bathing"]
+    }
   },
   {
     id: 4,
-    name: "Làng cổ Stơr – Anh hùng Núp",
-    description: "Làng cổ Stơr nằm ở xã Tơ Tung, huyện KBang, nổi tiếng là quê hương của Anh hùng Núp – người anh hùng dân tộc Bahnar trong kháng chiến chống Pháp. Làng vẫn giữ nguyên kiến trúc nhà rông truyền thống, nhà sàn gỗ và nếp sống sinh hoạt cộng đồng lâu đời. Du khách có thể tham quan nhà rông, uống rượu cần, nghe cồng chiêng và tìm hiểu văn hóa bản địa Bahnar.",
-    shortDescription: "Làng Bahnar cổ, quê hương Anh hùng Núp với nhà rông truyền thống.",
-    category: ["Văn hóa", "Check-in"],
+    name: {
+      vi: "Làng cổ Stơr – Anh hùng Núp",
+      en: "Stor Ancient Village – Hero Nup"
+    },
+    description: {
+      vi: "Làng cổ Stơr nằm ở xã Tơ Tung, huyện KBang, nổi tiếng là quê hương của Anh hùng Núp – người anh hùng dân tộc Bahnar trong kháng chiến chống Pháp. Làng vẫn giữ nguyên kiến trúc nhà rông truyền thống, nhà sàn gỗ và nếp sống sinh hoạt cộng đồng lâu đời. Du khách có thể tham quan nhà rông, uống rượu cần, nghe cồng chiêng và tìm hiểu văn hóa bản địa Bahnar.",
+      en: "Stor ancient village is located in To Tung commune, KBang district, famous as the hometown of Hero Nup - a Bahnar national hero in the resistance war against the French. The village still preserves its traditional Rong house architecture, wooden stilt houses, and long-standing community lifestyle. Visitors can visit the Rong house, drink Can wine, listen to gongs, and learn about the indigenous Bahnar culture."
+    },
+    shortDescription: {
+      vi: "Làng Bahnar cổ, quê hương Anh hùng Núp với nhà rông truyền thống.",
+      en: "Ancient Bahnar village, hometown of Hero Nup with a traditional Rong house."
+    },
+    category: {
+      vi: ["Văn hóa", "Check-in"],
+      en: ["Culture", "Check-in"]
+    },
     rating: 4.6,
     reviewCount: 760,
     price: 0,
-    priceNote: "Miễn phí",
+    priceNote: {
+      vi: "Miễn phí",
+      en: "Free"
+    },
     openTime: "07:00",
     closeTime: "17:00",
-    duration: "2-3 giờ",
-    address: "Xã Tơ Tung, H. KBang, Gia Lai",
+    duration: {
+      vi: "2-3 giờ",
+      en: "2-3 hours"
+    },
+    address: {
+      vi: "Xã Tơ Tung, H. KBang, Gia Lai",
+      en: "To Tung Commune, KBang Dist, Gia Lai"
+    },
     lat: 14.2456,
     lng: 108.5123,
     image: "/images/lang_stor_bahnar_1782505259629.png",
-    tags: ["Văn hóa", "Lịch sử", "Cộng đồng"],
-    highlights: ["Nhà rông truyền thống", "Uống rượu cần", "Cồng chiêng Tây Nguyên"]
+    tags: {
+      vi: ["Văn hóa", "Lịch sử", "Cộng đồng"],
+      en: ["Culture", "History", "Community"]
+    },
+    highlights: {
+      vi: ["Nhà rông truyền thống", "Uống rượu cần", "Cồng chiêng Tây Nguyên"],
+      en: ["Traditional Rong house", "Drinking Can wine", "Central Highlands Gongs"]
+    }
   },
   {
     id: 5,
-    name: "Đồi chè Biển Hồ",
-    description: "Đồi chè Biển Hồ là một trong những đồi chè đẹp nhất Việt Nam, nằm gần Biển Hồ T'Nưng. Những đồi chè xanh ngút ngàn trải dài trên địa hình đồi núi, tạo nên những đường cong mềm mại tuyệt đẹp. Sáng sớm, sương giăng phủ kín đồi chè, tạo nên khung cảnh như thiên đường. Đây là điểm check-in yêu thích của giới trẻ và nhiếp ảnh gia.",
-    shortDescription: "Đồi chè xanh ngút ngàn, điểm check-in sương mù tuyệt đẹp.",
-    category: ["Thiên nhiên", "Check-in", "Cà phê"],
+    name: {
+      vi: "Đồi chè Biển Hồ",
+      en: "Bien Ho Tea Hills"
+    },
+    description: {
+      vi: "Đồi chè Biển Hồ là một trong những đồi chè đẹp nhất Việt Nam, nằm gần Biển Hồ T'Nưng. Những đồi chè xanh ngút ngàn trải dài trên địa hình đồi núi, tạo nên những đường cong mềm mại tuyệt đẹp. Sáng sớm, sương giăng phủ kín đồi chè, tạo nên khung cảnh như thiên đường. Đây là điểm check-in yêu thích của giới trẻ và nhiếp ảnh gia.",
+      en: "Bien Ho Tea Hills is one of the most beautiful tea hills in Vietnam, located near T'Nung Lake. The endless green tea hills stretch over the mountainous terrain, creating beautiful soft curves. In the early morning, mist covers the tea hills, creating a heavenly scene. This is a favorite check-in spot for young people and photographers."
+    },
+    shortDescription: {
+      vi: "Đồi chè xanh ngút ngàn, điểm check-in sương mù tuyệt đẹp.",
+      en: "Endless green tea hills, a beautiful misty check-in spot."
+    },
+    category: {
+      vi: ["Thiên nhiên", "Check-in", "Cà phê"],
+      en: ["Nature", "Check-in", "Coffee"]
+    },
     rating: 4.6,
     reviewCount: 1560,
     price: 0,
-    priceNote: "Miễn phí",
+    priceNote: {
+      vi: "Miễn phí",
+      en: "Free"
+    },
     openTime: "05:00",
     closeTime: "18:00",
-    duration: "1-2 giờ",
-    address: "Xã Nghĩa Hưng, TP. Pleiku, Gia Lai",
+    duration: {
+      vi: "1-2 giờ",
+      en: "1-2 hours"
+    },
+    address: {
+      vi: "Xã Nghĩa Hưng, TP. Pleiku, Gia Lai",
+      en: "Nghia Hung Commune, Pleiku City, Gia Lai"
+    },
     lat: 14.0234,
     lng: 107.9876,
     image: "/images/doi_che_gia_lai_1782505177095.png",
-    tags: ["Check-in", "Nhiếp ảnh", "Miễn phí"],
-    highlights: ["Sương sớm đẹp 5-7h sáng", "Đường cong đồi chè", "Gần Biển Hồ"]
+    tags: {
+      vi: ["Check-in", "Nhiếp ảnh", "Miễn phí"],
+      en: ["Check-in", "Photography", "Free"]
+    },
+    highlights: {
+      vi: ["Sương sớm đẹp 5-7h sáng", "Đường cong đồi chè", "Gần Biển Hồ"],
+      en: ["Beautiful early morning mist 5-7am", "Tea hill curves", "Near T'Nung Lake"]
+    }
   },
   {
-    id: 6,
-    name: "Nhà thờ gỗ Kon Tum (Gần Gia Lai)",
-    description: "Tuy nằm ở Kon Tum lân cận, nhà thờ gỗ là điểm đến không thể bỏ qua khi tour Gia Lai. Nhà thờ được xây dựng hoàn toàn bằng gỗ cà chít theo phong cách Roman kết hợp kiến trúc nhà rông Bahnar, là một kiệt tác kiến trúc độc đáo của vùng Tây Nguyên. Bên trong nhà thờ có những bức tranh kính nhiều màu sắc rực rỡ.",
-    shortDescription: "Kiệt tác kiến trúc gỗ kết hợp Roman và nhà rông Bahnar.",
-    category: ["Văn hóa", "Check-in"],
-    rating: 4.7,
-    reviewCount: 2100,
-    price: 0,
-    priceNote: "Miễn phí",
-    openTime: "06:00",
-    closeTime: "17:00",
-    duration: "1 giờ",
-    address: "21 Trần Hưng Đạo, TP. Kon Tum",
-    lat: 14.3514,
-    lng: 108.0075,
-    image: "/images/nha_tho_go_1782505298118.png",
-    tags: ["Văn hóa", "Kiến trúc", "Tâm linh"],
-    highlights: ["Kiến trúc gỗ 100 năm", "Tranh kính màu", "Vườn hoa xung quanh"]
+    "id": 6,
+    "name": {
+      "vi": "Chùa Minh Thành",
+      "en": "Minh Thanh Pagoda"
+    },
+    "description": {
+      "vi": "Ngôi chùa có kiến trúc độc đáo mang phong cách Nhật Bản và Đài Loan tại trung tâm TP. Pleiku.",
+      "en": "A pagoda with unique Japanese and Taiwanese architecture in the center of Pleiku City."
+    },
+    "shortDescription": {
+      "vi": "Chùa kiến trúc Nhật Bản độc đáo.",
+      "en": "Unique Japanese architecture pagoda."
+    },
+    "category": {
+      "vi": [
+        "Văn hóa",
+        "Check-in"
+      ],
+      "en": [
+        "Culture",
+        "Check-in"
+      ]
+    },
+    "rating": 4.8,
+    "reviewCount": 2100,
+    "price": 0,
+    "priceNote": {
+      "vi": "Miễn phí",
+      "en": "Free"
+    },
+    "openTime": "07:00",
+    "closeTime": "18:00",
+    "duration": {
+      "vi": "1-2 giờ",
+      "en": "1-2 hours"
+    },
+    "address": {
+      "vi": "TP. Pleiku, Gia Lai",
+      "en": "Pleiku City, Gia Lai"
+    },
+    "lat": 13.9772,
+    "lng": 108.0069,
+    "image": "/images/chua_minh_thanh_1782505218638.png",
+    "tags": {
+      "vi": [
+        "Tâm linh",
+        "Văn hóa",
+        "Check-in"
+      ],
+      "en": [
+        "Spiritual",
+        "Culture",
+        "Check-in"
+      ]
+    },
+    "highlights": {
+      "vi": [
+        "Kiến trúc Á Đông",
+        "Tháp Từ Tôn",
+        "Hồ nước thanh bình"
+      ],
+      "en": [
+        "Asian architecture",
+        "Tu Ton tower",
+        "Peaceful lake"
+      ]
+    }
   },
   {
-    id: 7,
-    name: "Quán cà phê Wind Farm Gia Lai",
-    description: "Khu vực cánh đồng điện gió Gia Lai với những trụ turbine khổng lồ quay giữa bầu trời xanh, tạo nên khung cảnh cực kỳ ấn tượng. Xung quanh khu vực có nhiều quán cà phê view đẹp để ngắm cảnh. Thưởng thức ly cà phê Gia Lai giữa đồng cỏ xanh với gió Tây Nguyên là trải nghiệm không thể quên.",
-    shortDescription: "Cà phê giữa cánh đồng gió, view turbine khổng lồ.",
-    category: ["Cà phê", "Check-in", "Nghỉ dưỡng"],
-    rating: 4.4,
-    reviewCount: 890,
-    price: 35000,
-    priceNote: "35.000đ/ly cà phê",
-    openTime: "06:00",
-    closeTime: "21:00",
-    duration: "1-2 giờ",
-    address: "H. Chư Prông, Gia Lai",
-    lat: 13.7500,
-    lng: 107.8333,
-    image: "/images/wind_farm_gia_lai_1782505268122.png",
-    tags: ["Cà phê", "Check-in", "Chill"],
-    highlights: ["View cánh đồng gió", "Cà phê nguyên chất", "Hoàng hôn tuyệt đẹp"]
+    "id": 7,
+    "name": {
+      "vi": "Hồ Ayun Hạ",
+      "en": "Ayun Ha Lake"
+    },
+    "description": {
+      "vi": "Hồ nhân tạo rộng lớn với phong cảnh hữu tình, thích hợp câu cá và dã ngoại.",
+      "en": "A large artificial lake with beautiful scenery, suitable for fishing and picnics."
+    },
+    "shortDescription": {
+      "vi": "Hồ sinh thái rộng lớn, yên bình.",
+      "en": "Large and peaceful ecological lake."
+    },
+    "category": {
+      "vi": [
+        "Thiên nhiên",
+        "Nghỉ dưỡng"
+      ],
+      "en": [
+        "Nature",
+        "Relaxation"
+      ]
+    },
+    "rating": 4.4,
+    "reviewCount": 850,
+    "price": 0,
+    "priceNote": {
+      "vi": "Miễn phí",
+      "en": "Free"
+    },
+    "openTime": "00:00",
+    "closeTime": "23:59",
+    "duration": {
+      "vi": "2-4 giờ",
+      "en": "2-4 hours"
+    },
+    "address": {
+      "vi": "H. Chư Sê, Gia Lai",
+      "en": "Chu Se Dist, Gia Lai"
+    },
+    "lat": 13.5833,
+    "lng": 108.2333,
+    "image": "/images/ho_ayun_ha_1782505317015.png",
+    "tags": {
+      "vi": [
+        "Sinh thái",
+        "Câu cá",
+        "Gia đình"
+      ],
+      "en": [
+        "Ecological",
+        "Fishing",
+        "Family"
+      ]
+    },
+    "highlights": {
+      "vi": [
+        "Cảnh quan tĩnh lặng",
+        "Du thuyền trên hồ",
+        "Câu cá giải trí"
+      ],
+      "en": [
+        "Quiet landscape",
+        "Boating on lake",
+        "Fishing"
+      ]
+    }
   },
   {
-    id: 8,
-    name: "Chùa Minh Thành",
-    description: "Chùa Minh Thành là ngôi chùa đẹp nhất Pleiku, tọa lạc trên đồi cao với kiến trúc đậm chất Á Đông, pha trộn giữa Nhật Bản và Trung Hoa. Chùa có tháp 7 tầng vươn cao giữa rừng thông, tạo nên cảnh quan vô cùng trang nghiêm và thanh tịnh. Đặc biệt đẹp vào lúc hoàng hôn khi ánh nắng chiều phản chiếu lên mái ngói.",
-    shortDescription: "Ngôi chùa kiến trúc Á Đông tuyệt đẹp trên đồi thông.",
-    category: ["Văn hóa", "Check-in"],
-    rating: 4.8,
-    reviewCount: 1780,
-    price: 0,
-    priceNote: "Miễn phí",
-    openTime: "05:30",
-    closeTime: "18:00",
-    duration: "1-2 giờ",
-    address: "Đường Nguyễn Viết Xuân, TP. Pleiku, Gia Lai",
-    lat: 13.9690,
-    lng: 108.0060,
-    image: "/images/chua_minh_thanh_1782505218638.png",
-    tags: ["Văn hóa", "Tâm linh", "Kiến trúc"],
-    highlights: ["Tháp 7 tầng", "View hoàng hôn", "Rừng thông"]
+    "id": 8,
+    "name": {
+      "vi": "Vườn Quốc gia Kon Ka Kinh",
+      "en": "Kon Ka Kinh National Park"
+    },
+    "description": {
+      "vi": "Khu dự trữ sinh quyển thế giới với thảm thực vật phong phú, thích hợp trekking.",
+      "en": "A world biosphere reserve with rich vegetation, suitable for trekking."
+    },
+    "shortDescription": {
+      "vi": "Khu bảo tồn thiên nhiên hùng vĩ, lý tưởng để trekking.",
+      "en": "Majestic nature reserve, ideal for trekking."
+    },
+    "category": {
+      "vi": [
+        "Thiên nhiên",
+        "Trekking"
+      ],
+      "en": [
+        "Nature",
+        "Trekking"
+      ]
+    },
+    "rating": 4.7,
+    "reviewCount": 520,
+    "price": 40000,
+    "priceNote": {
+      "vi": "40.000đ/người",
+      "en": "40,000 VND/person"
+    },
+    "openTime": "07:00",
+    "closeTime": "17:00",
+    "duration": {
+      "vi": "1-2 ngày",
+      "en": "1-2 days"
+    },
+    "address": {
+      "vi": "H. Mang Yang, Gia Lai",
+      "en": "Mang Yang Dist, Gia Lai"
+    },
+    "lat": 14.3,
+    "lng": 108.3167,
+    "image": "/images/kon_ka_kinh_1782505306871.png",
+    "tags": {
+      "vi": [
+        "Trekking",
+        "Rừng nguyên sinh",
+        "Động vật hoang dã"
+      ],
+      "en": [
+        "Trekking",
+        "Primeval forest",
+        "Wildlife"
+      ]
+    },
+    "highlights": {
+      "vi": [
+        "Leo núi",
+        "Khám phá động thực vật",
+        "Suối thác hoang sơ"
+      ],
+      "en": [
+        "Mountain climbing",
+        "Flora and fauna exploration",
+        "Pristine streams"
+      ]
+    }
   },
   {
-    id: 9,
-    name: "Vườn quốc gia Kon Ka Kinh",
-    description: "Vườn quốc gia Kon Ka Kinh nằm ở huyện KBang, là khu bảo tồn thiên nhiên với diện tích hơn 41.000 ha. Nơi đây là nơi cư trú của nhiều loài động thực vật quý hiếm, bao gồm voọc chà vá chân xám. Đỉnh Kon Ka Kinh cao 1.748m là thử thách hấp dẫn cho các trekker. Hệ sinh thái rừng nguyên sinh phong phú với nhiều loài cây gỗ quý.",
-    shortDescription: "Vườn quốc gia nguyên sinh 41.000 ha, thiên đường trekking.",
-    category: ["Thiên nhiên", "Trekking", "Cắm trại"],
-    rating: 4.5,
-    reviewCount: 560,
-    price: 50000,
-    priceNote: "50.000đ/người",
-    openTime: "06:00",
-    closeTime: "16:00",
-    duration: "4-8 giờ",
-    address: "H. KBang, Gia Lai",
-    lat: 14.2100,
-    lng: 108.3200,
-    image: "/images/kon_ka_kinh_1782505306871.png",
-    tags: ["Trekking", "Cắm trại", "Sinh thái"],
-    highlights: ["Leo đỉnh 1.748m", "Voọc chà vá", "Rừng nguyên sinh"]
+    "id": 9,
+    "name": {
+      "vi": "Nhà thờ Gỗ Kon Tum (Gần Gia Lai)",
+      "en": "Wooden Church (Near Gia Lai)"
+    },
+    "description": {
+      "vi": "Kiến trúc nhà thờ hoàn toàn bằng gỗ theo phong cách Roman pha trộn nhà sàn Ba Na.",
+      "en": "Church architecture entirely made of wood in Roman style mixed with Ba Na stilt house."
+    },
+    "shortDescription": {
+      "vi": "Nhà thờ gỗ độc đáo hơn 100 năm tuổi.",
+      "en": "Unique wooden church over 100 years old."
+    },
+    "category": {
+      "vi": [
+        "Văn hóa",
+        "Check-in"
+      ],
+      "en": [
+        "Culture",
+        "Check-in"
+      ]
+    },
+    "rating": 4.8,
+    "reviewCount": 3200,
+    "price": 0,
+    "priceNote": {
+      "vi": "Miễn phí",
+      "en": "Free"
+    },
+    "openTime": "07:00",
+    "closeTime": "18:00",
+    "duration": {
+      "vi": "1-2 giờ",
+      "en": "1-2 hours"
+    },
+    "address": {
+      "vi": "TP. Kon Tum",
+      "en": "Kon Tum City"
+    },
+    "lat": 14.3546,
+    "lng": 108.0008,
+    "image": "/images/nha_tho_go_1782505298118.png",
+    "tags": {
+      "vi": [
+        "Kiến trúc",
+        "Lịch sử",
+        "Check-in"
+      ],
+      "en": [
+        "Architecture",
+        "History",
+        "Check-in"
+      ]
+    },
+    "highlights": {
+      "vi": [
+        "Kiến trúc gỗ trắc",
+        "Khuôn viên rộng rãi",
+        "Thiết kế hòa quyện"
+      ],
+      "en": [
+        "Rosewood architecture",
+        "Spacious campus",
+        "Blended design"
+      ]
+    }
   },
   {
-    id: 10,
-    name: "Phố núi Pleiku – Ẩm thực đêm",
-    description: "Khu phố ẩm thực đêm Pleiku với nhiều món đặc sản Tây Nguyên nổi tiếng: phở khô Gia Lai, bún bò Pleiku, cơm lam gà nướng, lẩu lá rừng, và đặc biệt là cà phê muối. Buổi tối, phố đi bộ nhộn nhịp với đèn lồng, quán ăn vỉa hè ấm cúng. Đây là nơi lý tưởng để trải nghiệm văn hóa ẩm thực địa phương.",
-    shortDescription: "Phố đi bộ ẩm thực với phở khô, cà phê muối nổi tiếng.",
-    category: ["Ẩm thực", "Check-in"],
-    rating: 4.3,
-    reviewCount: 3200,
-    price: 50000,
-    priceNote: "50.000-150.000đ/bữa",
-    openTime: "16:00",
-    closeTime: "23:00",
-    duration: "2-3 giờ",
-    address: "Đường Hùng Vương, TP. Pleiku, Gia Lai",
-    lat: 13.9833,
-    lng: 108.0167,
-    image: "/images/pleiku_food_street_1782505210206.png",
-    tags: ["Ẩm thực", "Phở khô", "Cà phê muối"],
-    highlights: ["Phở khô nổi tiếng", "Cà phê muối", "Cơm lam gà nướng"]
+    "id": 10,
+    "name": {
+      "vi": "Khu du lịch sinh thái Về Nguồn",
+      "en": "Ve Nguon Eco Resort"
+    },
+    "description": {
+      "vi": "Không gian xanh mát, thích hợp cho các hoạt động vui chơi gia đình và thưởng thức ẩm thực.",
+      "en": "Green space, suitable for family fun activities and enjoying food."
+    },
+    "shortDescription": {
+      "vi": "Khu nghỉ dưỡng sinh thái gia đình.",
+      "en": "Family eco-resort."
+    },
+    "category": {
+      "vi": [
+        "Nghỉ dưỡng",
+        "Gia đình có trẻ em"
+      ],
+      "en": [
+        "Relaxation",
+        "Family with kids"
+      ]
+    },
+    "rating": 4.3,
+    "reviewCount": 1150,
+    "price": 50000,
+    "priceNote": {
+      "vi": "50.000đ/người",
+      "en": "50,000 VND/person"
+    },
+    "openTime": "08:00",
+    "closeTime": "20:00",
+    "duration": {
+      "vi": "Nửa ngày",
+      "en": "Half day"
+    },
+    "address": {
+      "vi": "TP. Pleiku, Gia Lai",
+      "en": "Pleiku City, Gia Lai"
+    },
+    "lat": 14.0011,
+    "lng": 107.995,
+    "image": "/images/ve_nguon_eco_1782505339435.png",
+    "tags": {
+      "vi": [
+        "Gia đình",
+        "Trẻ em",
+        "Ẩm thực"
+      ],
+      "en": [
+        "Family",
+        "Kids",
+        "Food"
+      ]
+    },
+    "highlights": {
+      "vi": [
+        "Hồ bơi",
+        "Nhà hàng",
+        "Khu vui chơi trẻ em"
+      ],
+      "en": [
+        "Pool",
+        "Restaurant",
+        "Kids area"
+      ]
+    }
   },
   {
-    id: 11,
-    name: "Hồ Ayun Hạ",
-    description: "Hồ Ayun Hạ là hồ chứa nước lớn thuộc huyện Phú Thiện, cách Pleiku khoảng 70km. Mặt hồ rộng mênh mông phản chiếu bầu trời xanh và những dãy núi xa xa. Khu vực hồ rất yên tĩnh, thích hợp cho cắm trại và picnic. Vào mùa khô, một số bãi đất ven hồ lộ ra, tạo thành những bãi cỏ xanh rất đẹp.",
-    shortDescription: "Hồ nước lớn yên bình, lý tưởng cho cắm trại và picnic.",
-    category: ["Thiên nhiên", "Cắm trại", "Nghỉ dưỡng"],
-    rating: 4.2,
-    reviewCount: 420,
-    price: 0,
-    priceNote: "Miễn phí",
-    openTime: "Cả ngày",
-    closeTime: "Cả ngày",
-    duration: "3-5 giờ",
-    address: "H. Phú Thiện, Gia Lai",
-    lat: 13.5667,
-    lng: 108.3000,
-    image: "/images/ho_ayun_ha_1782505317015.png",
-    tags: ["Cắm trại", "Nghỉ dưỡng", "Thiên nhiên"],
-    highlights: ["Cắm trại ven hồ", "Câu cá", "Ngắm sao đêm"]
+    "id": 11,
+    "name": {
+      "vi": "Điện gió Đắk Đoa",
+      "en": "Dak Doa Wind Farm"
+    },
+    "description": {
+      "vi": "Cánh đồng quạt gió khổng lồ đẹp như trời Âu, là điểm check-in hoàng hôn cực chill.",
+      "en": "A huge wind farm beautiful like Europe, a chill sunset check-in spot."
+    },
+    "shortDescription": {
+      "vi": "Cánh đồng quạt gió check-in hoàng hôn tuyệt đẹp.",
+      "en": "Wind farm for beautiful sunset check-in."
+    },
+    "category": {
+      "vi": [
+        "Check-in",
+        "Thiên nhiên"
+      ],
+      "en": [
+        "Check-in",
+        "Nature"
+      ]
+    },
+    "rating": 4.5,
+    "reviewCount": 1800,
+    "price": 0,
+    "priceNote": {
+      "vi": "Miễn phí",
+      "en": "Free"
+    },
+    "openTime": "00:00",
+    "closeTime": "23:59",
+    "duration": {
+      "vi": "1 giờ",
+      "en": "1 hour"
+    },
+    "address": {
+      "vi": "H. Đắk Đoa, Gia Lai",
+      "en": "Dak Doa Dist, Gia Lai"
+    },
+    "lat": 14.05,
+    "lng": 108.1,
+    "image": "/images/wind_farm_gia_lai_1782505268122.png",
+    "tags": {
+      "vi": [
+        "Hoàng hôn",
+        "Check-in",
+        "Chill"
+      ],
+      "en": [
+        "Sunset",
+        "Check-in",
+        "Chill"
+      ]
+    },
+    "highlights": {
+      "vi": [
+        "Tua bin gió khổng lồ",
+        "Cánh đồng cỏ",
+        "Hoàng hôn lãng mạn"
+      ],
+      "en": [
+        "Giant wind turbines",
+        "Grass field",
+        "Romantic sunset"
+      ]
+    }
   },
   {
-    id: 12,
-    name: "Khu du lịch Về Nguồn",
-    description: "Khu du lịch Về Nguồn nằm gần Biển Hồ, là tổ hợp nghỉ dưỡng sinh thái kết hợp văn hóa dân tộc. Nơi đây có khu vui chơi cho trẻ em, nhà hàng ẩm thực dân tộc, và các hoạt động team building ngoài trời. Thích hợp cho gia đình có trẻ nhỏ muốn trải nghiệm thiên nhiên và văn hóa Tây Nguyên.",
-    shortDescription: "Khu nghỉ dưỡng sinh thái, lý tưởng cho gia đình có trẻ em.",
-    category: ["Gia đình có trẻ em", "Nghỉ dưỡng", "Ẩm thực"],
-    rating: 4.1,
-    reviewCount: 340,
-    price: 80000,
-    priceNote: "80.000đ/người lớn, 40.000đ/trẻ em",
-    openTime: "07:00",
-    closeTime: "17:00",
-    duration: "3-4 giờ",
-    address: "Xã Biển Hồ, TP. Pleiku, Gia Lai",
-    lat: 14.0200,
-    lng: 108.0100,
-    image: "/images/ve_nguon_eco_1782505339435.png",
-    tags: ["Gia đình", "Trẻ em", "Nghỉ dưỡng"],
-    highlights: ["Khu vui chơi trẻ em", "Ẩm thực dân tộc", "Team building"]
+    "id": 12,
+    "name": {
+      "vi": "Kỳ Co",
+      "en": "Ky Co Beach"
+    },
+    "description": {
+      "vi": "Được mệnh danh là Maldives của Việt Nam với làn nước trong xanh và bãi cát trắng mịn.",
+      "en": "Known as the Maldives of Vietnam with clear blue water and white sand."
+    },
+    "shortDescription": {
+      "vi": "Thiên đường biển trong xanh tựa Maldives.",
+      "en": "A blue sea paradise like Maldives."
+    },
+    "category": {
+      "vi": [
+        "Biển",
+        "Nghỉ dưỡng biển"
+      ],
+      "en": [
+        "Beach",
+        "Beach Resort"
+      ]
+    },
+    "rating": 4.9,
+    "reviewCount": 5500,
+    "price": 100000,
+    "priceNote": {
+      "vi": "100.000đ/vé cổng",
+      "en": "100,000 VND/ticket"
+    },
+    "openTime": "07:00",
+    "closeTime": "17:00",
+    "duration": {
+      "vi": "Nửa ngày",
+      "en": "Half day"
+    },
+    "address": {
+      "vi": "Xã Nhơn Lý, Quy Nhơn",
+      "en": "Nhon Ly, Quy Nhon"
+    },
+    "lat": 13.8828,
+    "lng": 109.2974,
+    "image": "/images/ky_co_beach_1782812243763.png",
+    "tags": {
+      "vi": [
+        "Biển",
+        "Sống ảo",
+        "San hô"
+      ],
+      "en": [
+        "Beach",
+        "Check-in",
+        "Coral"
+      ]
+    },
+    "highlights": {
+      "vi": [
+        "Nước biển trong vắt",
+        "Lặn ngắm san hô",
+        "Cầu Yến"
+      ],
+      "en": [
+        "Crystal clear water",
+        "Coral diving",
+        "Yen Bridge"
+      ]
+    }
+  },
+  {
+    "id": 13,
+    "name": {
+      "vi": "Eo Gió",
+      "en": "Eo Gio"
+    },
+    "description": {
+      "vi": "Eo biển hình cung tuyệt đẹp được bao bọc bởi những rặng núi đá hùng vĩ.",
+      "en": "A beautiful bow-shaped strait surrounded by majestic rocky mountains."
+    },
+    "shortDescription": {
+      "vi": "Nơi ngắm hoàng hôn và bình minh đẹp nhất Việt Nam.",
+      "en": "The best place to watch sunset and sunrise in Vietnam."
+    },
+    "category": {
+      "vi": [
+        "Biển",
+        "Check-in"
+      ],
+      "en": [
+        "Beach",
+        "Check-in"
+      ]
+    },
+    "rating": 4.8,
+    "reviewCount": 4800,
+    "price": 25000,
+    "priceNote": {
+      "vi": "25.000đ/vé",
+      "en": "25,000 VND/ticket"
+    },
+    "openTime": "05:00",
+    "closeTime": "18:00",
+    "duration": {
+      "vi": "1-2 giờ",
+      "en": "1-2 hours"
+    },
+    "address": {
+      "vi": "Xã Nhơn Lý, Quy Nhơn",
+      "en": "Nhon Ly, Quy Nhon"
+    },
+    "lat": 13.8998,
+    "lng": 109.2842,
+    "image": "/images/eo_gio_1782812490073.png",
+    "tags": {
+      "vi": [
+        "Cảnh quan",
+        "Check-in",
+        "Gió biển"
+      ],
+      "en": [
+        "Landscape",
+        "Check-in",
+        "Sea breeze"
+      ]
+    },
+    "highlights": {
+      "vi": [
+        "Con đường ven biển đỏ rực",
+        "Vách đá cheo leo",
+        "Ống nhòm ngắm cảnh"
+      ],
+      "en": [
+        "Red coastal road",
+        "Steep cliffs",
+        "Binoculars"
+      ]
+    }
+  },
+  {
+    "id": 14,
+    "name": {
+      "vi": "Khu dã ngoại Trung Lương",
+      "en": "Trung Luong Camping"
+    },
+    "description": {
+      "vi": "Khu cắm trại ven biển với phong cách lều trại mộc mạc và bãi tắm hoang sơ.",
+      "en": "Coastal camping area with rustic tents and pristine beaches."
+    },
+    "shortDescription": {
+      "vi": "Thung lũng cắm trại sát biển lý tưởng.",
+      "en": "Ideal seaside camping valley."
+    },
+    "category": {
+      "vi": [
+        "Cắm trại ven biển",
+        "Check-in"
+      ],
+      "en": [
+        "Beach Camping",
+        "Check-in"
+      ]
+    },
+    "rating": 4.5,
+    "reviewCount": 2200,
+    "price": 40000,
+    "priceNote": {
+      "vi": "40.000đ/vé",
+      "en": "40,000 VND/ticket"
+    },
+    "openTime": "07:00",
+    "closeTime": "22:00",
+    "duration": {
+      "vi": "Nửa ngày hoặc Qua đêm",
+      "en": "Half day or Overnight"
+    },
+    "address": {
+      "vi": "Phù Cát, Quy Nhơn",
+      "en": "Phu Cat, Quy Nhon"
+    },
+    "lat": 13.945,
+    "lng": 109.155,
+    "image": "/images/trung_luong_camp_1782812263702.png",
+    "tags": {
+      "vi": [
+        "Cắm trại",
+        "Chill",
+        "Biển"
+      ],
+      "en": [
+        "Camping",
+        "Chill",
+        "Beach"
+      ]
+    },
+    "highlights": {
+      "vi": [
+        "Ngủ lều ven biển",
+        "Đốt lửa trại",
+        "Check-in ghế gỗ"
+      ],
+      "en": [
+        "Sleep in tent",
+        "Campfire",
+        "Wooden chairs"
+      ]
+    }
+  },
+  {
+    "id": 15,
+    "name": {
+      "vi": "Ghềnh Ráng Tiên Sa",
+      "en": "Ghenh Rang Tien Sa"
+    },
+    "description": {
+      "vi": "Khu du lịch nổi tiếng với Bãi tắm Hoàng Hậu (Bãi Đá Trứng) và khu mộ thi sĩ Hàn Mặc Tử.",
+      "en": "Famous tourist area with Queen Beach (Egg Stone Beach) and Han Mac Tu poet's grave."
+    },
+    "shortDescription": {
+      "vi": "Chiêm ngưỡng Bãi Đá Trứng và viếng mộ Hàn Mặc Tử.",
+      "en": "Admire Egg Stone Beach and visit Han Mac Tu's grave."
+    },
+    "category": {
+      "vi": [
+        "Biển",
+        "Văn hóa"
+      ],
+      "en": [
+        "Beach",
+        "Culture"
+      ]
+    },
+    "rating": 4.6,
+    "reviewCount": 4100,
+    "price": 0,
+    "priceNote": {
+      "vi": "Miễn phí",
+      "en": "Free"
+    },
+    "openTime": "06:00",
+    "closeTime": "21:00",
+    "duration": {
+      "vi": "1-2 giờ",
+      "en": "1-2 hours"
+    },
+    "address": {
+      "vi": "Phường Ghềnh Ráng, Quy Nhơn",
+      "en": "Ghenh Rang Ward, Quy Nhon"
+    },
+    "lat": 13.754,
+    "lng": 109.215,
+    "image": "/images/ghenh_rang_1782812297133.png",
+    "tags": {
+      "vi": [
+        "Lịch sử",
+        "Thi ca",
+        "Biển"
+      ],
+      "en": [
+        "History",
+        "Poetry",
+        "Beach"
+      ]
+    },
+    "highlights": {
+      "vi": [
+        "Bãi đá trứng khổng lồ",
+        "Mộ thi sĩ Hàn Mặc Tử",
+        "Đồi Thi Nhân"
+      ],
+      "en": [
+        "Giant egg stones",
+        "Han Mac Tu grave",
+        "Poet's Hill"
+      ]
+    }
+  },
+  {
+    "id": 16,
+    "name": {
+      "vi": "Cù Lao Xanh",
+      "en": "Cu Lao Xanh Island"
+    },
+    "description": {
+      "vi": "Hòn ngọc Biển Đông với ngọn hải đăng cổ kính và nhịp sống làng chài yên bình.",
+      "en": "The pearl of the East Sea with an ancient lighthouse and a peaceful fishing village."
+    },
+    "shortDescription": {
+      "vi": "Hòn đảo hoang sơ tuyệt đẹp cách xa đất liền.",
+      "en": "Beautiful pristine island far from the mainland."
+    },
+    "category": {
+      "vi": [
+        "Khám phá đảo",
+        "Lặn ngắm san hô"
+      ],
+      "en": [
+        "Island Exploration",
+        "Coral Diving"
+      ]
+    },
+    "rating": 4.8,
+    "reviewCount": 1500,
+    "price": 350000,
+    "priceNote": {
+      "vi": "Từ 350.000đ/Cano",
+      "en": "From 350k/Canoe"
+    },
+    "openTime": "06:00",
+    "closeTime": "17:00",
+    "duration": {
+      "vi": "1 Ngày",
+      "en": "1 Day"
+    },
+    "address": {
+      "vi": "Xã Nhơn Châu, Quy Nhơn",
+      "en": "Nhon Chau, Quy Nhon"
+    },
+    "lat": 13.6167,
+    "lng": 109.35,
+    "image": "/images/cu_lao_xanh_1782812499387.png",
+    "tags": {
+      "vi": [
+        "Biển đảo",
+        "Hải đăng",
+        "Hải sản"
+      ],
+      "en": [
+        "Islands",
+        "Lighthouse",
+        "Seafood"
+      ]
+    },
+    "highlights": {
+      "vi": [
+        "Ngọn hải đăng 100 tuổi",
+        "Cột cờ tổ quốc",
+        "San hô tuyệt đẹp"
+      ],
+      "en": [
+        "100-year-old lighthouse",
+        "Flagpole",
+        "Beautiful coral"
+      ]
+    }
+  },
+  {
+    "id": 17,
+    "name": {
+      "vi": "Safari Park FLC",
+      "en": "FLC Safari Park"
+    },
+    "description": {
+      "vi": "Công viên động vật hoang dã đầu tiên tại Quy Nhơn với nhiều loài thú quý hiếm.",
+      "en": "The first wild animal park in Quy Nhon with many rare species."
+    },
+    "shortDescription": {
+      "vi": "Trải nghiệm thế giới động vật hoang dã lý thú.",
+      "en": "Experience an interesting wild animal world."
+    },
+    "category": {
+      "vi": [
+        "Vui chơi giải trí",
+        "Gia đình có trẻ em"
+      ],
+      "en": [
+        "Entertainment",
+        "Family with kids"
+      ]
+    },
+    "rating": 4.5,
+    "reviewCount": 3000,
+    "price": 100000,
+    "priceNote": {
+      "vi": "100.000đ/vé",
+      "en": "100,000 VND/ticket"
+    },
+    "openTime": "09:00",
+    "closeTime": "17:00",
+    "duration": {
+      "vi": "2-3 giờ",
+      "en": "2-3 hours"
+    },
+    "address": {
+      "vi": "Khu du lịch FLC Nhơn Lý",
+      "en": "FLC Nhon Ly Resort"
+    },
+    "lat": 13.91,
+    "lng": 109.28,
+    "image": "/images/safari_park_1782812318879.png",
+    "tags": {
+      "vi": [
+        "Động vật",
+        "Gia đình",
+        "Trẻ em"
+      ],
+      "en": [
+        "Animals",
+        "Family",
+        "Kids"
+      ]
+    },
+    "highlights": {
+      "vi": [
+        "Tương tác với thú",
+        "Xe điện tham quan",
+        "Chụp ảnh với vẹt"
+      ],
+      "en": [
+        "Animal interaction",
+        "Electric car tour",
+        "Photo with parrots"
+      ]
+    }
+  },
+  {
+    "id": 18,
+    "name": {
+      "vi": "Chùa Ông Núi",
+      "en": "Ong Nui Temple"
+    },
+    "description": {
+      "vi": "Nơi có tượng Phật ngồi lớn nhất Đông Nam Á hướng ra biển cả bao la.",
+      "en": "Home to the largest sitting Buddha statue in Southeast Asia facing the vast sea."
+    },
+    "shortDescription": {
+      "vi": "Tượng Phật khổng lồ linh thiêng tọa lạc trên núi cao.",
+      "en": "Sacred giant Buddha statue located on a high mountain."
+    },
+    "category": {
+      "vi": [
+        "Văn hóa",
+        "Check-in"
+      ],
+      "en": [
+        "Culture",
+        "Check-in"
+      ]
+    },
+    "rating": 4.7,
+    "reviewCount": 2500,
+    "price": 0,
+    "priceNote": {
+      "vi": "Miễn phí",
+      "en": "Free"
+    },
+    "openTime": "06:00",
+    "closeTime": "18:00",
+    "duration": {
+      "vi": "1-2 giờ",
+      "en": "1-2 hours"
+    },
+    "address": {
+      "vi": "Xã Cát Tiến, Phù Cát",
+      "en": "Cat Tien, Phu Cat"
+    },
+    "lat": 13.975,
+    "lng": 109.185,
+    "image": "/images/ong_nui_temple_1782812307544.png",
+    "tags": {
+      "vi": [
+        "Tâm linh",
+        "Kiến trúc",
+        "Check-in"
+      ],
+      "en": [
+        "Spiritual",
+        "Architecture",
+        "Check-in"
+      ]
+    },
+    "highlights": {
+      "vi": [
+        "Leo 600 bậc thang",
+        "Tượng Phật khổng lồ",
+        "View ngắm biển từ trên cao"
+      ],
+      "en": [
+        "Climb 600 stairs",
+        "Giant Buddha statue",
+        "Sea view from above"
+      ]
+    }
+  },
+  {
+    "id": 19,
+    "name": {
+      "vi": "Tháp Đôi",
+      "en": "Twin Towers"
+    },
+    "description": {
+      "vi": "Hai ngọn tháp Chăm pa cổ kính ngay giữa lòng thành phố Quy Nhơn.",
+      "en": "Two ancient Cham towers right in the heart of Quy Nhon city."
+    },
+    "shortDescription": {
+      "vi": "Di tích kiến trúc văn hóa Chăm Pa rực rỡ.",
+      "en": "Brilliant Cham Pa cultural architecture relic."
+    },
+    "category": {
+      "vi": [
+        "Văn hóa"
+      ],
+      "en": [
+        "Culture"
+      ]
+    },
+    "rating": 4.4,
+    "reviewCount": 1900,
+    "price": 20000,
+    "priceNote": {
+      "vi": "20.000đ/vé",
+      "en": "20,000 VND/ticket"
+    },
+    "openTime": "07:00",
+    "closeTime": "18:00",
+    "duration": {
+      "vi": "1 giờ",
+      "en": "1 hour"
+    },
+    "address": {
+      "vi": "Đường Trần Hưng Đạo, Quy Nhơn",
+      "en": "Tran Hung Dao St, Quy Nhon"
+    },
+    "lat": 13.785,
+    "lng": 109.215,
+    "image": "/images/thap_doi_1782812547242.png",
+    "tags": {
+      "vi": [
+        "Lịch sử",
+        "Chăm Pa",
+        "Kiến trúc"
+      ],
+      "en": [
+        "History",
+        "Cham Pa",
+        "Architecture"
+      ]
+    },
+    "highlights": {
+      "vi": [
+        "Kiến trúc gạch nung",
+        "Phù điêu thần chim Garuda",
+        "Check-in hoài cổ"
+      ],
+      "en": [
+        "Baked brick architecture",
+        "Garuda bird relief",
+        "Nostalgic check-in"
+      ]
+    }
   }
 ];
 
 export const preferenceOptions = [
-  { id: 'thien-nhien', label: 'Thiên nhiên', icon: '🌿', color: 'from-green-400 to-emerald-600', image: '/images/kon_ka_kinh_1782505306871.png' },
-  { id: 'am-thuc', label: 'Ẩm thực', icon: '🍜', color: 'from-orange-400 to-red-500', image: '/images/pleiku_food_street_1782505210206.png' },
-  { id: 'check-in', label: 'Check-in', icon: '📸', color: 'from-pink-400 to-rose-500', image: '/images/bien_ho_tnnung_1782505155088.png' },
-  { id: 'van-hoa', label: 'Văn hóa', icon: '🏛️', color: 'from-purple-400 to-indigo-600', image: '/images/lang_stor_bahnar_1782505259629.png' },
-  { id: 'trekking', label: 'Trekking', icon: '🥾', color: 'from-amber-500 to-orange-600', image: '/images/chu_dang_ya_volcano_1782505165301.png' },
-  { id: 'cam-trai', label: 'Cắm trại', icon: '⛺', color: 'from-teal-400 to-cyan-600', image: '/images/ho_ayun_ha_1782505317015.png' },
-  { id: 'nghi-duong', label: 'Nghỉ dưỡng', icon: '🏖️', color: 'from-sky-400 to-blue-500', image: '/images/ve_nguon_eco_1782505339435.png' },
-  { id: 'ca-phe', label: 'Cà phê', icon: '☕', color: 'from-yellow-700 to-amber-900', image: '/images/wind_farm_gia_lai_1782505268122.png' },
-  { id: 'gia-dinh', label: 'Gia đình có trẻ em', icon: '👨‍👩‍👧‍👦', color: 'from-lime-400 to-green-500', image: '/images/ve_nguon_eco_1782505339435.png' },
+  { id: 'nature', label: { vi: 'Thiên nhiên & Phong cảnh', en: 'Nature & Landscape' }, icon: '🌿', image: '/images/bien_ho_tnnung_1782505155088.png' },
+  { id: 'culture', label: { vi: 'Văn hóa & Lịch sử', en: 'Culture & History' }, icon: '🏛️', image: '/images/chua_minh_thanh_1782505218638.png' },
+  { id: 'adventure', label: { vi: 'Khám phá & Mạo hiểm', en: 'Adventure & Exploration' }, icon: '🏕️', image: '/images/chu_dang_ya_volcano_1782505165301.png' },
+  { id: 'food', label: { vi: 'Ẩm thực địa phương', en: 'Local Cuisine' }, icon: '🍜', image: '/images/pleiku_food_street_1782505210206.png' },
+  { id: 'relax', label: { vi: 'Nghỉ dưỡng & Chụp ảnh', en: 'Relaxation & Photography' }, icon: '📸', image: '/images/doi_che_gia_lai_1782505177095.png' },
+  { id: 'family', label: { vi: 'Gia đình & Trẻ em', en: 'Family & Kids' }, icon: '👨‍👩‍👧‍👦', image: '/images/safari_park_1782812318879.png' },
+  { id: 'camping', label: { vi: 'Cắm trại & Dã ngoại', en: 'Camping & Picnic' }, icon: '⛺', image: '/images/trung_luong_camp_1782812263702.png' },
+  { id: 'checkin', label: { vi: 'Sống ảo & Giới trẻ', en: 'Trendy & Check-in' }, icon: '✨', image: '/images/wind_farm_gia_lai_1782505268122.png' },
+  { id: 'spiritual', label: { vi: 'Tâm linh & Bình yên', en: 'Spiritual & Peaceful' }, icon: '🧘', image: '/images/ong_nui_temple_1782812307544.png' }
 ];
 
 export default placesData;

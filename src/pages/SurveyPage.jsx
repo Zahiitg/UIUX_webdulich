@@ -2,8 +2,11 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import useTravelStore from '../store/useTravelStore';
 import { preferenceOptions } from '../data/placesData';
+import { useTranslation } from 'react-i18next';
 
 export default function SurveyPage() {
+  const { i18n } = useTranslation();
+  const lang = i18n.language || 'vi';
   const navigate = useNavigate();
   const { selectedPreferences, togglePreference } = useTravelStore();
   const canContinue = selectedPreferences.length > 0;
@@ -114,7 +117,7 @@ export default function SurveyPage() {
                 <div className="relative z-10 w-full">
                   <span className="text-2xl mb-1 block drop-shadow-md">{pref.icon}</span>
                   <span className="text-sm font-bold text-white drop-shadow-md tracking-wide">
-                    {pref.label}
+                    {pref.label[lang] || pref.label.vi || pref.label}
                   </span>
                 </div>
               </button>

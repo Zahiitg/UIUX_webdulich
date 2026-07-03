@@ -1,7 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import './i18n'
+import './config/i18n'
+import ErrorBoundary from './components/ErrorBoundary';
 import App from './App.jsx'
 
 // Initialize theme before React renders to prevent FOUC and ensure F5 works
@@ -14,6 +15,8 @@ if (savedTheme === 'dark') {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </StrictMode>,
 )

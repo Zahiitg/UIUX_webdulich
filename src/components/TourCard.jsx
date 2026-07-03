@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import useTravelStore from '../store/useTravelStore';
 import { CATEGORY_CONFIG } from '../data/toursData';
+import { useTranslation } from 'react-i18next';
 
 // Star rating component
 function StarRating({ rating }) {
@@ -31,6 +32,9 @@ function StarRating({ rating }) {
 }
 
 export default function TourCard({ place, index }) {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language || 'vi';
+  
   const [imgError, setImgError] = useState(false);
   
   const wishlist = useTravelStore((state) => state.wishlist);
@@ -77,7 +81,7 @@ export default function TourCard({ place, index }) {
           ) : (
             <img
               src={place.image}
-              alt={place.name}
+              alt={place.name[lang] || place.name}
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
               onError={() => setImgError(true)}
               loading="lazy"
@@ -111,7 +115,7 @@ export default function TourCard({ place, index }) {
                 ? 'bg-primary-500/90 text-white'
                 : 'bg-white/90 dark:bg-slate-800/90 text-primary-600 dark:text-primary-400'
             }`}>
-              {place.price === 0 ? '✨ Miễn phí' : place.priceNote}
+              {place.price === 0 ? t('common.free') : (place.priceNote[lang] || place.priceNote)}
             </span>
           </div>
 
@@ -121,14 +125,14 @@ export default function TourCard({ place, index }) {
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              {place.duration}
+              {place.duration[lang] || place.duration}
             </span>
           </div>
 
           {/* Name on image */}
           <div className="absolute bottom-3 left-3 right-3">
             <h3 className="text-lg font-bold text-white leading-tight drop-shadow-lg line-clamp-2">
-              {place.name}
+              {place.name[lang] || place.name}
             </h3>
           </div>
         </div>
@@ -143,26 +147,28 @@ export default function TourCard({ place, index }) {
                 {place.rating}
               </span>
               <span className="text-xs text-dark-400 dark:text-slate-500">
-                ({place.reviewCount.toLocaleString('vi-VN')} đánh giá)
+                ({place.reviewCount.toLocaleString(lang === 'vi' ? 'vi-VN' : 'en-US')} {t('common.reviews', 'đánh giá')})
               </span>
             </div>
           </div>
 
           {/* Short description */}
           <p className="text-sm text-dark-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
-            {place.shortDescription}
+            {place.shortDescription[lang] || place.shortDescription}
           </p>
 
           {/* Category tags */}
           <div className="flex flex-wrap gap-1.5">
-            {place.category.slice(0, 3).map((cat) => (
+            {(place.category[lang] || place.category).slice(0, 3).map((cat, i) => {
+              const origCat = place.category.vi ? place.category.vi[i] : cat;
+              return (
               <span
                 key={cat}
                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-200/50 dark:border-primary-700/30"
               >
-                {CATEGORY_CONFIG[cat]?.icon || '📍'} {cat}
+                {CATEGORY_CONFIG[origCat]?.icon || '📍'} {cat}
               </span>
-            ))}
+            )})}
           </div>
 
           {/* Address */}
@@ -172,7 +178,7 @@ export default function TourCard({ place, index }) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <span className="truncate">{place.address}</span>
+              <span className="truncate">{place.address[lang] || place.address}</span>
             </div>
           )}
 

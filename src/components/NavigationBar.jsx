@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { User, Globe } from 'lucide-react';
 import useTravelStore from '../store/useTravelStore';
 import { useTranslation } from 'react-i18next';
+import NotificationDropdown from './NotificationDropdown';
 
 const navLinks = [
   { to: '/onboarding', label: 'Home' },
@@ -119,6 +120,9 @@ export default function NavigationBar() {
             >
               {i18n.language?.startsWith('en') ? 'VI' : 'EN'}
             </button>
+
+            {/* Notification Bell */}
+            <NotificationDropdown />
 
             {/* Theme Toggle Button */}
             <button

@@ -2,16 +2,18 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const features = [
-  { icon: '📍', title: 'Điểm đến đa dạng', desc: 'Từ núi rừng đến biển hồ' },
+  { icon: '📍', title: 'Điểm đến đa dạng', desc: 'Từ đại ngàn hùng vĩ đến biển xanh' },
   { icon: '📸', title: 'Trải nghiệm trọn vẹn', desc: 'Văn hóa - Ẩm thực - Con người' },
   { icon: '⭐', title: 'Dịch vụ chất lượng', desc: 'Uy tín - An toàn - Tiện lợi' },
   { icon: '🤖', title: 'Trợ lý AI thông minh', desc: 'Lên lịch trình trong 5 giây' },
 ];
 
 const polaroids = [
-  { src: '/images/bien_ho_tnnung_1782505155088.png', title: 'Biển Hồ T\'Nưng', rotation: '-rotate-6', z: 'z-10', translate: '-translate-x-12 -translate-y-4' },
-  { src: '/images/chu_dang_ya_volcano_1782505165301.png', title: 'Chư Đăng Ya', rotation: 'rotate-3', z: 'z-20', translate: 'translate-y-8' },
-  { src: '/images/doi_che_gia_lai_1782505177095.png', title: 'Đồi chè Biển Hồ', rotation: 'rotate-12', z: 'z-10', translate: 'translate-x-12 -translate-y-8' },
+  { src: '/images/chu_dang_ya_volcano_1782505165301.png', title: 'Chư Đăng Ya', rotation: '-rotate-12', z: 'z-10', translate: '-translate-x-32 -translate-y-12' },
+  { src: '/images/bien_ho_tnnung_1782505155088.png', title: 'Biển Hồ', rotation: '-rotate-6', z: 'z-20', translate: '-translate-x-16 translate-y-0' },
+  { src: '/images/ky_co_beach_1782812243763.png', title: 'Kỳ Co', rotation: 'rotate-2', z: 'z-30', translate: 'translate-x-0 translate-y-8' },
+  { src: '/images/hon_kho_island_1782812253597.png', title: 'Hòn Khô', rotation: 'rotate-6', z: 'z-20', translate: 'translate-x-16 -translate-y-4' },
+  { src: '/images/eo_gio_1782812490073.png', title: 'Eo Gió', rotation: 'rotate-12', z: 'z-10', translate: 'translate-x-32 translate-y-6' },
 ];
 
 export default function OnboardingPage() {

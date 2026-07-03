@@ -3,7 +3,8 @@ import { create } from 'zustand';
 const useTravelStore = create((set, get) => ({
   // ===== Authentication =====
   user: null, // Sẽ lưu thông tin user từ Firebase (uid, email, displayName, photoURL)
-  setUser: (user) => set({ user }),
+  isAuthLoading: true,
+  setUser: (user) => set({ user, isAuthLoading: false }),
   logout: () => set({ user: null }),
 
   // ===== Theme =====
@@ -122,6 +123,31 @@ const useTravelStore = create((set, get) => ({
   // ===== Navigation & UI =====
   currentStep: 0,
   setCurrentStep: (step) => set({ currentStep: step }),
+
+  // ===== Notifications =====
+  notifications: JSON.parse(localStorage.getItem('travel_notifications')) || [],
+  setNotifications: (notifications) => {
+    localStorage.setItem('travel_notifications', JSON.stringify(notifications));
+    set({ notifications });
+  },
+  markNotificationRead: (id) => set((state) => {
+    const updated = state.notifications.map(n => n.id === id ? { ...n, read: true } : n);
+    localStorage.setItem('travel_notifications', JSON.stringify(updated));
+    return { notifications: updated };
+  }),
+  addNotification: (notification) => set((state) => {
+    const updated = [notification, ...state.notifications];
+    localStorage.setItem('travel_notifications', JSON.stringify(updated));
+    return { notifications: updated };
+  }),
+
+  // ===== Reviews =====
+  reviews: JSON.parse(localStorage.getItem('travel_reviews')) || [],
+  addReview: (review) => set((state) => {
+    const updated = [review, ...state.reviews];
+    localStorage.setItem('travel_reviews', JSON.stringify(updated));
+    return { reviews: updated };
+  }),
 
   // ===== Reset =====
   resetAll: () => set({

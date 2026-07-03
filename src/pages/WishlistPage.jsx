@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Heart, ArrowLeft, Search } from 'lucide-react';
 import useTravelStore from '../store/useTravelStore';
 import toursData from '../data/toursData';
@@ -7,6 +7,11 @@ import TourCard from '../components/TourCard';
 
 export default function WishlistPage() {
   const wishlistIds = useTravelStore((state) => state.wishlist);
+  const location = useLocation();
+
+  const isFromProfile = location.state?.from === '/profile';
+  const backUrl = isFromProfile ? '/profile' : '/';
+  const backText = isFromProfile ? 'Quay lại Hồ sơ' : 'Về trang chủ';
 
   const wishlistTours = useMemo(() => {
     return toursData.filter(tour => wishlistIds.includes(tour.id));
@@ -19,8 +24,8 @@ export default function WishlistPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
-            <Link to="/" className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:underline mb-4 font-medium">
-              <ArrowLeft className="w-4 h-4" /> Về trang chủ
+            <Link to={backUrl} className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:underline mb-4 font-medium">
+              <ArrowLeft className="w-4 h-4" /> {backText}
             </Link>
             <h1 className="text-3xl md:text-4xl font-extrabold text-dark-900 dark:text-white flex items-center gap-3">
               <Heart className="w-8 h-8 text-red-500 fill-red-500" />

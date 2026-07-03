@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import placesData from '../data/placesData';
 import Breadcrumb from '../components/Breadcrumb';
-import ShareMenu from '../components/ShareMenu';
+import ReviewSection from '../components/ReviewSection';
+import SEO from '../components/SEO';
+import { useTranslation } from 'react-i18next';
 
 const FALLBACK_IMAGES = [
   "/images/lang_stor_bahnar_1782505259629.png", // Lake
@@ -41,11 +44,16 @@ function InfoCell({ icon, label, value }) {
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────
 export default function PlaceDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const place = placesData.find((p) => p.id === Number(id));
+  const [openFaq, setOpenFaq] = useState(null);
+  
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language || 'vi';
+
+  const faqs = t('placeDetail.faqs', { returnObjects: true }) || [];
 
   // ── Not found ──
   if (!place) {
@@ -53,10 +61,10 @@ export default function PlaceDetailPage() {
       <div className="page-container flex flex-col items-center justify-center min-h-screen px-4">
         <div className="text-center animate-fade-in-up">
           <span className="text-6xl mb-4 block">🔍</span>
-          <h2 className="text-2xl font-bold text-dark-900 mb-2">Không tìm thấy</h2>
-          <p className="text-dark-500 mb-6">Địa điểm bạn tìm không tồn tại hoặc đã bị xóa.</p>
+          <h2 className="text-2xl font-bold text-dark-900 mb-2">{t('placeDetail.notFound')}</h2>
+          <p className="text-dark-500 mb-6">{t('placeDetail.notFoundDesc')}</p>
           <button onClick={() => navigate(-1)} className="btn-primary">
-            ← Quay lại
+            {t('tourDetail.back')}
           </button>
         </div>
       </div>
@@ -69,13 +77,19 @@ export default function PlaceDetailPage() {
   };
 
   return (
-    <div className="page-container min-h-screen bg-white dark:bg-slate-900 pb-28">
+    <>
+      <SEO 
+        title={place.name[lang] || place.name} 
+        description={place.description[lang] || place.description}
+        image={place.image}
+      />
+      <div className="page-container min-h-screen bg-white dark:bg-slate-900 pb-28">
       {/* ──── Hero Section with Real Image ──── */}
       <div className="relative h-80 overflow-hidden">
         {/* Background image */}
         <img 
           src={place.image} 
-          alt={place.name}
+          alt={place.name[lang] || place.name}
           className="absolute inset-0 w-full h-full object-cover"
           onError={(e) => {
             e.target.onerror = null;
@@ -109,27 +123,27 @@ export default function PlaceDetailPage() {
 
         {/* Share button */}
         <div className="absolute top-4 right-4 z-20">
-          <ShareMenu title={`Khám phá: ${place.name}`} />
+          <ShareMenu title={`${t('placeDetail.explore')} ${place.name[lang] || place.name}`} />
         </div>
 
         {/* Hero text */}
         <div className="absolute bottom-0 inset-x-0 p-5 z-10">
           {/* Category badges */}
           <div className="flex gap-2 mb-3 animate-fade-in">
-            {place.category.slice(0, 3).map((cat) => (
+            {(place.category[lang] || place.category).slice(0, 3).map((cat) => (
               <span key={cat} className="px-2.5 py-1 bg-white/20 backdrop-blur-sm rounded-full text-[11px] font-semibold text-white border border-white/20">
                 {cat}
               </span>
             ))}
           </div>
           <h1 className="text-2xl font-extrabold text-white leading-tight drop-shadow-lg animate-fade-in-up">
-            {place.name}
+            {place.name[lang] || place.name}
           </h1>
           <p className="text-white/80 text-sm mt-1.5 flex items-center gap-1.5 animate-fade-in-up delay-100">
             <svg className="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
             </svg>
-            {place.address}
+            {place.address[lang] || place.address}
           </p>
         </div>
       </div>
@@ -138,8 +152,8 @@ export default function PlaceDetailPage() {
       <div className="px-4 -mt-4 relative z-10">
         <div className="pt-8 pb-4">
           <Breadcrumb items={[
-            { label: 'Tìm kiếm', path: '/search' },
-            { label: place.name }
+            { label: t('common.search'), path: '/search' },
+            { label: place.name[lang] || place.name }
           ]} />
         </div>
 
@@ -153,7 +167,7 @@ export default function PlaceDetailPage() {
               <div>
                 <StarRating rating={place.rating} size="lg" />
                 <p className="text-xs text-dark-400 dark:text-slate-400 mt-0.5">
-                  {place.reviewCount.toLocaleString('vi-VN')} đánh giá
+                  {place.reviewCount.toLocaleString(lang === 'vi' ? 'vi-VN' : 'en-US')} {t('common.reviews')}
                 </p>
               </div>
             </div>
@@ -165,7 +179,7 @@ export default function PlaceDetailPage() {
                   ? 'bg-accent-50 dark:bg-accent-900/30 text-accent-700 dark:text-accent-400'
                   : 'bg-dark-100 dark:bg-slate-700 text-dark-600 dark:text-slate-300'
               }`}>
-                {place.rating >= 4.7 ? 'Tuyệt vời' : place.rating >= 4.3 ? 'Rất tốt' : 'Tốt'}
+                {place.rating >= 4.7 ? t('placeDetail.excellent') : place.rating >= 4.3 ? t('placeDetail.veryGood') : t('placeDetail.good')}
               </span>
             </div>
           </div>
@@ -174,7 +188,7 @@ export default function PlaceDetailPage() {
         {/* Short description card */}
         <div className="bg-primary-50/50 dark:bg-primary-900/20 border border-primary-100 dark:border-primary-800/50 rounded-2xl p-4 mb-4 animate-fade-in-up delay-200">
           <p className="text-sm text-primary-800 dark:text-primary-200 font-medium leading-relaxed italic">
-            "{place.shortDescription}"
+            "{place.shortDescription[lang] || place.shortDescription}"
           </p>
         </div>
 
@@ -182,18 +196,18 @@ export default function PlaceDetailPage() {
         <div className="grid grid-cols-3 gap-3 mb-6 animate-fade-in-up delay-300">
           <InfoCell
             icon="🕐"
-            label="Giờ mở cửa"
+            label={t('placeDetail.openHours')}
             value={`${place.openTime} - ${place.closeTime}`}
           />
           <InfoCell
             icon="🎫"
-            label="Giá vé"
-            value={place.priceNote}
+            label={t('placeDetail.ticketPrice')}
+            value={place.priceNote[lang] || place.priceNote}
           />
           <InfoCell
             icon="⏱️"
-            label="Thời gian"
-            value={place.duration}
+            label={t('compare.duration')}
+            value={place.duration[lang] || place.duration}
           />
         </div>
 
@@ -201,22 +215,22 @@ export default function PlaceDetailPage() {
         <div className="mb-6 animate-fade-in-up delay-400">
           <h2 className="section-title text-lg mb-3 flex items-center gap-2 dark:text-white">
             <span className="w-1 h-6 bg-primary-500 rounded-full" />
-            Mô tả
+            {t('placeDetail.descriptionTitle')}
           </h2>
           <p className="text-dark-600 dark:text-slate-300 text-sm leading-relaxed">
-            {place.description}
+            {place.description[lang] || place.description}
           </p>
         </div>
 
         {/* Highlights */}
-        {place.highlights && place.highlights.length > 0 && (
+        {place.highlights && (place.highlights[lang] || place.highlights.vi || place.highlights).length > 0 && (
           <div className="mb-6 animate-fade-in-up delay-500">
             <h2 className="section-title text-lg mb-3 flex items-center gap-2 dark:text-white">
               <span className="w-1 h-6 bg-accent-500 rounded-full" />
-              Điểm nổi bật
+              {t('compare.highlights')}
             </h2>
             <div className="space-y-2.5">
-              {place.highlights.map((hl, i) => (
+              {(place.highlights[lang] || place.highlights.vi || place.highlights).map((hl, i) => (
                 <div
                   key={i}
                   className="flex items-start gap-3 bg-dark-50 dark:bg-slate-800/80 rounded-xl px-4 py-3 group hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors duration-200"
@@ -252,6 +266,33 @@ export default function PlaceDetailPage() {
             ))}
           </div>
         </div>
+
+        {/* ──── FAQ Accordion ──── */}
+        <h2 className="section-title text-lg mb-4 flex items-center gap-2 dark:text-white">
+          <span className="w-1 h-6 bg-violet-500 rounded-full" />
+          {t('tourDetail.faq')}
+        </h2>
+        <div className="space-y-2 mb-10">
+          {faqs.map((faq, i) => (
+            <div key={i} className="border border-dark-100 dark:border-slate-700 rounded-xl overflow-hidden">
+              <button
+                onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                className="w-full flex items-center justify-between px-4 py-3.5 text-left hover:bg-dark-50 dark:hover:bg-slate-800 transition-colors"
+              >
+                <span className="text-sm font-semibold text-dark-800 dark:text-white">{faq.q}</span>
+                <svg className={`w-4 h-4 text-dark-400 dark:text-slate-500 transition-transform duration-200 shrink-0 ml-2 ${openFaq === i ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div className={`overflow-hidden transition-all duration-300 ${openFaq === i ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <p className="px-4 pb-4 text-sm text-dark-500 dark:text-slate-400 leading-relaxed">{faq.a}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ──── Reviews ──── */}
+        <ReviewSection itemId={place.id} itemType="place" rating={place.rating} reviewCount={place.reviewCount} />
       </div>
 
       {/* ──── Sticky Bottom Bar ──── */}
@@ -265,13 +306,13 @@ export default function PlaceDetailPage() {
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
               </svg>
-              Chỉ đường
+              {t('placeDetail.directions')}
             </button>
             <button className="flex-1 btn-accent py-3.5 rounded-xl text-sm flex items-center justify-center gap-2">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
               </svg>
-              Thêm vào lịch trình
+              {t('placeDetail.addToItinerary')}
             </button>
           </div>
         </div>

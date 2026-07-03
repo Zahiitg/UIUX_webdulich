@@ -7,28 +7,34 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
-  updateProfile
+  updateProfile,
+  sendPasswordResetEmail
 } from 'firebase/auth';
 import useTravelStore from '../store/useTravelStore';
+import { useTranslation } from 'react-i18next';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
   const setUser = useTravelStore((state) => state.setUser);
+  const { t } = useTranslation();
   
   const from = location.state?.from?.pathname || "/profile";
 
   const handleAuth = async (e) => {
     e.preventDefault();
     setError('');
+    setMessage('');
     setLoading(true);
     
     try {
@@ -55,13 +61,13 @@ export default function AuthPage() {
     } catch (err) {
       console.error(err);
       if (err.code === 'auth/invalid-credential') {
-        setError('Email hoặc mật khẩu không chính xác.');
+        setError(t('auth.invalidCredential'));
       } else if (err.code === 'auth/email-already-in-use') {
-        setError('Email này đã được sử dụng.');
+        setError(t('auth.emailInUse'));
       } else if (err.code === 'auth/weak-password') {
-        setError('Mật khẩu quá yếu, vui lòng nhập ít nhất 6 ký tự.');
+        setError(t('auth.weakPassword'));
       } else {
-        setError(`Lỗi: ${err.message}`);
+        setError(`${t('auth.errorPrefix')} ${err.message}`);
       }
     } finally {
       setLoading(false);
@@ -70,6 +76,7 @@ export default function AuthPage() {
 
   const handleGoogleLogin = async () => {
     setError('');
+    setMessage('');
     setLoading(true);
     try {
       const provider = new GoogleAuthProvider();
@@ -86,7 +93,29 @@ export default function AuthPage() {
       navigate(from, { replace: true });
     } catch (err) {
       console.error(err);
-      setError(`Lỗi Google: ${err.message}`);
+      setError(`${t('auth.googleError')} ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    setError('');
+    setMessage('');
+    setLoading(true);
+    
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setMessage(t('auth.resetEmailSent'));
+      setTimeout(() => setIsForgotPassword(false), 5000);
+    } catch (err) {
+      console.error(err);
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-email') {
+        setError(t('auth.userNotFound'));
+      } else {
+        setError(`${t('auth.errorPrefix')} ${err.message}`);
+      }
     } finally {
       setLoading(false);
     }
@@ -101,12 +130,14 @@ export default function AuthPage() {
             <span className="text-3xl">🌿</span>
           </div>
           <h2 className="text-2xl font-bold text-dark-900 dark:text-white mb-2">
-            {isLogin ? 'Chào mừng trở lại' : 'Tạo tài khoản mới'}
+            {isForgotPassword ? t('auth.resetPasswordTitle') : isLogin ? t('auth.loginTitle') : t('auth.registerTitle')}
           </h2>
           <p className="text-dark-500 dark:text-slate-400 text-sm">
-            {isLogin 
-              ? 'Đăng nhập để xem lịch sử đặt tour và lịch trình yêu thích' 
-              : 'Đăng ký ngay để bắt đầu hành trình khám phá Gia Lai'}
+            {isForgotPassword 
+              ? t('auth.resetPasswordDesc')
+              : isLogin 
+                ? t('auth.loginDesc') 
+                : t('auth.registerDesc')}
           </p>
         </div>
 
@@ -117,12 +148,17 @@ export default function AuthPage() {
               {error}
             </div>
           )}
+          {message && (
+            <div className="mb-6 p-4 bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 text-green-600 dark:text-green-400 text-sm rounded-xl">
+              {message}
+            </div>
+          )}
 
-          <form onSubmit={handleAuth} className="space-y-5">
-            {!isLogin && (
+          <form onSubmit={isForgotPassword ? handleForgotPassword : handleAuth} className="space-y-5">
+            {!isLogin && !isForgotPassword && (
               <div>
                 <label className="block text-sm font-medium text-dark-700 dark:text-slate-300 mb-1">
-                  Họ và tên
+                  {t('auth.fullName')}
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-dark-400">
@@ -134,7 +170,7 @@ export default function AuthPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="block w-full pl-11 pr-4 py-3 bg-dark-50 dark:bg-slate-900 border border-dark-200 dark:border-slate-700 rounded-xl text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all outline-none"
-                    placeholder="Nguyễn Văn A"
+                    placeholder={t('auth.fullNamePlaceholder')}
                   />
                 </div>
               </div>
@@ -142,7 +178,7 @@ export default function AuthPage() {
 
             <div>
               <label className="block text-sm font-medium text-dark-700 dark:text-slate-300 mb-1">
-                Email
+                {t('auth.email')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-dark-400">
@@ -154,37 +190,54 @@ export default function AuthPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="block w-full pl-11 pr-4 py-3 bg-dark-50 dark:bg-slate-900 border border-dark-200 dark:border-slate-700 rounded-xl text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all outline-none"
-                  placeholder="email@example.com"
+                  placeholder={t('auth.emailPlaceholder')}
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-dark-700 dark:text-slate-300 mb-1">
-                Mật khẩu
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-dark-400">
-                  <Lock className="h-5 w-5" />
+            {!isForgotPassword && (
+              <div>
+                <label className="block text-sm font-medium text-dark-700 dark:text-slate-300 mb-1">
+                  {t('auth.password')}
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-dark-400">
+                    <Lock className="h-5 w-5" />
+                  </div>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="block w-full pl-11 pr-12 py-3 bg-dark-50 dark:bg-slate-900 border border-dark-200 dark:border-slate-700 rounded-xl text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all outline-none"
+                    placeholder="••••••••"
+                    minLength={6}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-dark-400 hover:text-primary-500 transition-colors"
+                  >
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
                 </div>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-11 pr-12 py-3 bg-dark-50 dark:bg-slate-900 border border-dark-200 dark:border-slate-700 rounded-xl text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all outline-none"
-                  placeholder="••••••••"
-                  minLength={6}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-dark-400 hover:text-primary-500 transition-colors"
-                >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
+                {isLogin && (
+                  <div className="flex justify-end mt-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsForgotPassword(true);
+                        setError('');
+                        setMessage('');
+                      }}
+                      className="text-sm text-primary-600 dark:text-primary-400 hover:underline font-medium"
+                    >
+                      {t('auth.forgotPassword')}
+                    </button>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
 
             <button
               type="submit"
@@ -195,36 +248,55 @@ export default function AuthPage() {
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
-                  {isLogin ? 'Đăng nhập' : 'Đăng ký'}
+                  {isForgotPassword ? t('auth.sendResetEmail') : isLogin ? t('auth.login') : t('auth.register')}
                   <ArrowRight className="w-5 h-5" />
                 </>
               )}
             </button>
           </form>
 
-          <div className="mt-6 flex items-center justify-between">
-            <span className="w-1/5 border-b border-dark-200 dark:border-slate-700 lg:w-1/4"></span>
-            <span className="text-xs text-center text-dark-400 dark:text-slate-400 uppercase">Hoặc</span>
-            <span className="w-1/5 border-b border-dark-200 dark:border-slate-700 lg:w-1/4"></span>
-          </div>
+          {!isForgotPassword && (
+            <>
+              <div className="mt-6 flex items-center justify-between">
+                <span className="w-1/5 border-b border-dark-200 dark:border-slate-700 lg:w-1/4"></span>
+                <span className="text-xs text-center text-dark-400 dark:text-slate-400 uppercase">{t('auth.or')}</span>
+                <span className="w-1/5 border-b border-dark-200 dark:border-slate-700 lg:w-1/4"></span>
+              </div>
 
-          <button
-            onClick={handleGoogleLogin}
-            disabled={loading}
-            className="mt-6 w-full flex items-center justify-center gap-3 py-3 px-4 bg-white dark:bg-slate-800 border border-dark-200 dark:border-slate-700 text-dark-700 dark:text-slate-300 font-medium rounded-xl hover:bg-dark-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
-          >
-            <Globe className="w-5 h-5" />
-            Tiếp tục với Google
-          </button>
+              <button
+                onClick={handleGoogleLogin}
+                disabled={loading}
+                className="mt-6 w-full flex items-center justify-center gap-3 py-3 px-4 bg-white dark:bg-slate-800 border border-dark-200 dark:border-slate-700 text-dark-700 dark:text-slate-300 font-medium rounded-xl hover:bg-dark-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                <Globe className="w-5 h-5" />
+                {t('auth.continueWithGoogle')}
+              </button>
+            </>
+          )}
 
           <div className="mt-8 text-center text-sm text-dark-600 dark:text-slate-400">
-            {isLogin ? 'Chưa có tài khoản? ' : 'Đã có tài khoản? '}
-            <button
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-primary-600 dark:text-primary-400 font-medium hover:underline"
-            >
-              {isLogin ? 'Đăng ký ngay' : 'Đăng nhập'}
-            </button>
+            {isForgotPassword ? (
+              <button
+                onClick={() => {
+                  setIsForgotPassword(false);
+                  setError('');
+                  setMessage('');
+                }}
+                className="text-primary-600 dark:text-primary-400 font-medium hover:underline flex items-center justify-center gap-1 mx-auto"
+              >
+                {t('auth.backToLogin')}
+              </button>
+            ) : (
+              <>
+                {isLogin ? t('auth.noAccount') : t('auth.hasAccount')}
+                <button
+                  onClick={() => setIsLogin(!isLogin)}
+                  className="text-primary-600 dark:text-primary-400 font-medium hover:underline"
+                >
+                  {isLogin ? t('auth.registerNow') : t('auth.login')}
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

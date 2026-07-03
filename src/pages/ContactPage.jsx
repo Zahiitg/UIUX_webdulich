@@ -65,6 +65,16 @@ export default function ContactPage() {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       newErrors.email = 'Email không hợp lệ';
     }
+    
+    if (form.phone) {
+      const phoneRegex = /^[0-9+\-\s()]+$/;
+      if (!phoneRegex.test(form.phone)) {
+        newErrors.phone = 'Số điện thoại không hợp lệ (chỉ chứa số)';
+      } else if (form.phone.replace(/[^0-9]/g, '').length < 9) {
+        newErrors.phone = 'Số điện thoại quá ngắn';
+      }
+    }
+
     if (!form.subject) newErrors.subject = 'Vui lòng chọn chủ đề';
     if (!form.message.trim()) newErrors.message = 'Vui lòng nhập nội dung';
     return newErrors;
@@ -185,9 +195,20 @@ export default function ContactPage() {
                       name="phone" 
                       value={form.phone} 
                       onChange={handleChange} 
-                      className="w-full px-5 py-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:border-emerald-500 focus:ring-emerald-500/20 outline-none focus:ring-4 transition-all duration-300 dark:text-white placeholder:text-slate-400"
+                      onBlur={() => {
+                        if (form.phone) {
+                          const phoneRegex = /^[0-9+\-\s()]+$/;
+                          if (!phoneRegex.test(form.phone)) {
+                            setErrors(prev => ({ ...prev, phone: 'Số điện thoại không hợp lệ (chỉ chứa số)' }));
+                          } else if (form.phone.replace(/[^0-9]/g, '').length < 9) {
+                            setErrors(prev => ({ ...prev, phone: 'Số điện thoại quá ngắn' }));
+                          }
+                        }
+                      }}
+                      className={`w-full px-5 py-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border ${errors.phone ? 'border-red-400 focus:ring-red-500/20' : 'border-slate-200 dark:border-slate-700 focus:border-emerald-500 focus:ring-emerald-500/20'} outline-none focus:ring-4 transition-all duration-300 dark:text-white placeholder:text-slate-400`}
                       placeholder="0912 345 678"
                     />
+                    {errors.phone && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.phone}</p>}
                   </div>
 
                   {/* Subject Input */}

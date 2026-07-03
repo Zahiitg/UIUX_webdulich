@@ -32,16 +32,20 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const WishlistPage = lazy(() => import('./pages/WishlistPage'));
 const BookingConfirmationPage = lazy(() => import('./pages/BookingConfirmationPage'));
 const MyBookingsPage = lazy(() => import('./pages/MyBookingsPage'));
+const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
+
+import { useTranslation } from 'react-i18next';
 
 // Loading fallback
 function PageLoader() {
+  const { t } = useTranslation();
   return (
     <div className="page-container flex items-center justify-center h-screen bg-dark-50 dark:bg-slate-900 transition-colors duration-300">
       <div className="text-center animate-fade-in">
         <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg shadow-primary-500/30 animate-pulse-soft">
           <span className="text-3xl">🌿</span>
         </div>
-        <p className="text-dark-500 dark:text-slate-400 text-sm font-medium">Đang tải...</p>
+        <p className="text-dark-500 dark:text-slate-400 text-sm font-medium">{t('common.loading')}</p>
       </div>
     </div>
   );
@@ -102,6 +106,7 @@ function App() {
           <Route path="/promotions" element={<PromotionPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
+          <Route path="/checkout/:id" element={<CheckoutPage />} />
           <Route path="/booking-confirmation/:code" element={<BookingConfirmationPage />} />
           
           {/* Protected Routes */}
